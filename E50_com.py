@@ -7,7 +7,7 @@ checkpoint = "bert-base-cased"
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 print(f'Using {device} device')
 
-# super parameter
+# hyper parameter
 class Config():
     def __init__(self):
         self.dataset   = 'dataset/'+'reentrancy_273.txt'

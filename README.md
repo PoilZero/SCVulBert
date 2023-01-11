@@ -47,3 +47,5 @@ In train.sh will run
 ## References
 
 * Rechecker for Normalized dataset: https://github.com/Messi-Q/ReChecker
+  * This Project already stops maintained, this is a branch that I keep maintaining.
+  * https://github.com/PoilZero/ReChecker

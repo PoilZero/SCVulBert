@@ -1,0 +1,201 @@
+Using cuda device
+Epoch 1/20
+-------------------------------
+loss: 0.376700
+Valid Accuracy: 93.7%
+False positive rate(FP):  0.0091324200913242
+False negative rate(FN):  0.16379310344827586
+Recall:  0.8362068965517241
+Precision:  0.9797979797979798
+F1 score:  0.9023255813953488
+
+Epoch 2/20
+-------------------------------
+loss: 0.251431
+Valid Accuracy: 95.5%
+False positive rate(FP):  0.004484304932735426
+False negative rate(FN):  0.125
+Recall:  0.875
+Precision:  0.98989898989899
+F1 score:  0.9289099526066351
+
+Epoch 3/20
+-------------------------------
+loss: 0.188260
+Valid Accuracy: 98.5%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.04807692307692308
+Recall:  0.9519230769230769
+Precision:  1.0
+F1 score:  0.9753694581280787
+
+Epoch 4/20
+-------------------------------
+loss: 0.151248
+Valid Accuracy: 98.5%
+False positive rate(FP):  0.004291845493562232
+False negative rate(FN):  0.0392156862745098
+Recall:  0.9607843137254902
+Precision:  0.98989898989899
+F1 score:  0.9751243781094527
+
+Epoch 5/20
+-------------------------------
+loss: 0.126773
+Valid Accuracy: 98.5%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.04807692307692308
+Recall:  0.9519230769230769
+Precision:  1.0
+F1 score:  0.9753694581280787
+
+Epoch 6/20
+-------------------------------
+loss: 0.108282
+Valid Accuracy: 99.4%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.019801980198019802
+Recall:  0.9801980198019802
+Precision:  1.0
+F1 score:  0.99
+
+Epoch 7/20
+-------------------------------
+loss: 0.095680
+Valid Accuracy: 99.4%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.019801980198019802
+Recall:  0.9801980198019802
+Precision:  1.0
+F1 score:  0.99
+
+Epoch 8/20
+-------------------------------
+loss: 0.085257
+Valid Accuracy: 99.1%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.029411764705882353
+Recall:  0.9705882352941176
+Precision:  1.0
+F1 score:  0.9850746268656716
+
+Epoch 9/20
+-------------------------------
+loss: 0.077104
+Valid Accuracy: 99.4%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.019801980198019802
+Recall:  0.9801980198019802
+Precision:  1.0
+F1 score:  0.99
+
+Epoch 10/20
+-------------------------------
+loss: 0.070195
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 11/20
+-------------------------------
+loss: 0.064510
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 12/20
+-------------------------------
+loss: 0.060008
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 13/20
+-------------------------------
+loss: 0.055860
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 14/20
+-------------------------------
+loss: 0.052310
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 15/20
+-------------------------------
+loss: 0.049196
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 16/20
+-------------------------------
+loss: 0.046485
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 17/20
+-------------------------------
+loss: 0.044057
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 18/20
+-------------------------------
+loss: 0.041871
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 19/20
+-------------------------------
+loss: 0.039867
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+
+Epoch 20/20
+-------------------------------
+loss: 0.038075
+Valid Accuracy: 99.7%
+False positive rate(FP):  0.0
+False negative rate(FN):  0.01
+Recall:  0.99
+Precision:  1.0
+F1 score:  0.9949748743718593
+

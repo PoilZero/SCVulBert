@@ -1,0 +1,4867 @@
+1 650.sol
+contract DVPlock {
+uint256 public releaseTime;
+function release() public returns (bool) {
+require(block.timestamp >= releaseTime);
+return true;
+}
+}
+0
+---------------------------------
+2 2253.sol
+contract CardsRaffle {
+uint256 private raffleTicketsBought;
+uint256 private raffleTicketThatWon;
+function drawRandomWinner() public returns (uint256) {
+uint256 seed = raffleTicketsBought + block.timestamp;
+raffleTicketThatWon = addmod(uint256(block.blockhash(block.number-1)), seed, raffleTicketsBought);
+return raffleTicketThatWon;
+}
+}
+1
+---------------------------------
+3 1813.sol
+contract Bittwatt {
+function createDate(uint _minutes, uint _seconds) public view returns (uint) {
+uint currentTimestamp = block.timestamp;
+currentTimestamp += _seconds;
+currentTimestamp += 60 * _minutes;
+return currentTimestamp;
+}
+}
+1
+---------------------------------
+4 3543.sol
+contract OutCloud {
+uint256 public preico_startdate;
+uint public bonusCalculationFactor;
+uint disc;
+function getCurrentTokenPricepreICO() private returns (uint) {
+bonusCalculationFactor = (block.timestamp + (preico_startdate)) / (604800);
+if (bonusCalculationFactor== 0)
+disc = 30;
+return disc;
+}
+}
+1
+---------------------------------
+5 30396.sol
+contract Crowdsale{
+uint256 public startTime;
+uint256 public endTime;
+function validPurchase() internal view returns (bool) {
+bool withinPeriod = block.timestamp >= startTime && block.timestamp <= endTime;
+return withinPeriod;
+}
+}
+1
+---------------------------------
+6 339.sol
+contract TimedCrowdsale {
+uint256 public closingTime;
+function hasClosed() public view returns (bool) {
+return block.timestamp > closingTime;
+}
+}
+1
+---------------------------------
+7 30925.sol
+contract SaleBalanceTracker {
+uint256 public snapshotTimestamp = 0;
+bool public locked = false;
+function endSale() {
+require(!locked);
+snapshotTimestamp = block.timestamp;
+locked = true;
+return;
+}
+}
+0
+---------------------------------
+8 1404.sol
+contract CryptualProjectToken {
+uint256[] public crowdsaleMinElapsedTimeLevels = [0, 12 * 3600, 18 * 3600, 21 * 3600, 22 * 3600];
+uint256[] public crowdsaleUserCaps = [1 ether, 2 ether, 4 ether, 8 ether, 5000 ether];
+function getCrowdsaleUserCap() public view returns (uint256) {
+uint256 elapsedTime = block.timestamp + (1534935600);
+uint256 currentCap = 0;
+for (uint i = 0; i < crowdsaleUserCaps.length; i++) {
+if (elapsedTime < crowdsaleMinElapsedTimeLevels[i])
+continue;
+currentCap = crowdsaleUserCaps[i];
+}
+return currentCap;
+}
+}
+1
+---------------------------------
+9 14439.sol
+contract Sale {
+address public owner;
+uint public start;
+uint public end;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function softCap(uint _newend) onlyOwner {
+require(_newend >= block.timestamp && _newend >= start && _newend <= end);
+return;
+}
+}
+0
+---------------------------------
+10 34995.sol
+contract KingOfTheHill {
+uint public timeLimit = 1 hours;
+uint public lastKing;
+function () external payable {
+require(msg.value == 0.1 ether);
+if ((lastKing + timeLimit) < block.timestamp) {
+lastKing = 100;
+}
+}
+}
+1
+---------------------------------
+11 30976.sol
+contract CryptoLuckQuickEthV1 {
+bool public useOraclize;
+uint256 public lastDrawTs;
+function CryptoLuckQuickEthV1(bool _useOraclize) {
+useOraclize = _useOraclize;
+lastDrawTs = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+12 14872.sol
+contract SEEDCrowdsale {
+uint256 public phase2StartTime;
+uint256[6] public phase2Rates;
+uint256[6] public phase2RateOffsets;
+function getRate() public view returns (uint256) {
+uint offset = block.timestamp - (phase2StartTime);
+for (uint256 i = 0; i < phase2RateOffsets.length; i++) {
+if (offset < phase2RateOffsets[i]) {
+return phase2Rates[i];
+}
+}
+return 0;
+}
+}
+1
+---------------------------------
+13 16979.sol
+contract FrozenGuard {
+bool public stopped;
+function onTokenTransfer() public returns (bool) {
+if (!stopped && block.timestamp >= 1524801600) {
+return false;
+}
+return true;
+}
+}
+1
+---------------------------------
+14 5339.sol
+contract game {
+mapping (address => uint) readyTime;
+function view_readyTime(address _address) view public returns(uint _readyTime){
+uint time = block.timestamp;
+if (time >= readyTime[_address]){
+return 0 ;
+}
+else{
+return readyTime[_address] - time ;
+}
+}
+}
+1
+---------------------------------
+15 8026.sol
+contract ESSENTIA_PE {
+uint256 public pubEnd = 0;
+function EMGwithdraw(uint256 weiValue) external returns (bool){
+require(block.timestamp > pubEnd);
+require(weiValue > 0);
+return true;
+}
+}
+0
+---------------------------------
+16 36451.sol
+contract DINRegistry {
+struct Record {
+uint256 updated;
+}
+mapping (uint256 => Record) records;
+uint256 public genesis;
+function DINRegistry(uint256 _genesis) {
+genesis = _genesis;
+records[genesis].updated = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+17 34725.sol
+contract SwarmVotingMVP {
+bytes32 public ballotEncryptionSeckey;
+bool seckeyRevealed = false;
+uint256 public endTime;
+function revealSeckey(bytes32 _secKey) public {
+require(block.timestamp > endTime);
+ballotEncryptionSeckey = _secKey;
+seckeyRevealed = true;
+return;
+}
+}
+0
+---------------------------------
+18 400.sol
+contract Saturn {
+struct LuckyPending {
+uint64 block;
+}
+LuckyPending[] public luckyPendings;
+uint256 public luckyPendingIndex;
+function handleLuckyPending(uint256 _pendingSkipSize) private returns(bool) {
+if (luckyPendingIndex < luckyPendings.length - _pendingSkipSize) {
+uint256 _seed = uint256(keccak256(abi.encodePacked((block.timestamp))));
+return _seed > 0;
+}
+}
+}
+1
+---------------------------------
+19 35322.sol
+contract CONTSKCrowdsale{
+uint256 constant public END = 1539097200;
+address public wallet =0x71b658EDC685fB2D7fc06E4753156CEE6aBE44A1;
+function buyTokens(address beneficiary)payable {
+require(beneficiary != 0x0);
+require(block.timestamp <= END);
+uint256 etherAmount = msg.value;
+wallet.transfer(msg.value);
+return;
+}
+}
+0
+---------------------------------
+20 4922.sol
+contract Eurufly {
+uint256 public prePreIcoStartAt;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+enum STATE{ PREPREICO }
+STATE public state;
+function startPrePreIco() public onlyOwner returns (STATE) {
+prePreIcoStartAt = block.timestamp;
+state = STATE.PREPREICO;
+return state;
+}
+}
+0
+---------------------------------
+21 12292.sol
+contract UniDAGCrowdsale {
+uint256 public rateFirstRound = 4000;
+uint256 public secondRoundTime = 1539129600;
+function _getTokenAmount(uint256 _weiAmount) view internal returns (uint256) {
+if(block.timestamp < secondRoundTime)
+return _weiAmount * (rateFirstRound);
+}
+}
+1
+---------------------------------
+22 2777.sol
+contract FoMo3DWorld {
+uint256 public airDropTracker_ = 0;
+function airdrop() private view returns(bool) {
+uint256 seed = uint256(keccak256(abi.encodePacked((block.timestamp) + (block.difficulty))));
+if((seed - ((seed / 1000) * 1000)) < airDropTracker_)
+return(true);
+else
+return(false);
+}
+}
+1
+---------------------------------
+23 9918.sol
+contract DSNote {
+function time() constant returns (uint) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+24 16018.sol
+contract TeamToken  {
+uint64 public gameTime;
+function() payable public {
+if (gameTime > 1514764800) {
+require(gameTime - 300 > block.timestamp);
+}
+return;
+}
+}
+0
+---------------------------------
+25 5259.sol
+contract DSEasyMultisig {
+struct action {
+uint confirmations;
+uint expiration;
+}
+mapping( uint => action ) actions;
+function trigger(uint action_id) returns (bool){
+var a = actions[action_id];
+if(block.timestamp > a.expiration) { throw; }
+return true;
+}
+}
+0
+---------------------------------
+26 12841.sol
+contract Lottery {
+uint inactivity = 1;
+function adminIsDead() public {
+uint time = block.timestamp;
+if (inactivity == 1) {
+inactivity == time;
+}
+else {
+uint256 inactivityThreshold = (time - (30 days));
+assert(inactivityThreshold < time);
+if (inactivity < inactivityThreshold) {
+inactivity = 1;
+}
+}
+return;
+}
+}
+1
+---------------------------------
+27 27455.sol
+contract CryptoJingles {
+uint numOfPurchases;
+uint NUM_SAMPLE_RANGE = 1000;
+function randomGen(bytes32 blockHash, uint seed) constant public returns (uint randomNumber) {
+return (uint(keccak256(blockHash, block.timestamp, numOfPurchases, seed )) % NUM_SAMPLE_RANGE);
+}
+}
+1
+---------------------------------
+28 30963.sol
+contract DINRegistry {
+struct Record {
+address owner;
+address resolver;
+uint256 updated;
+}
+mapping (uint256 => Record) records;
+uint256 public index;
+function registerDINWithResolver(address _owner, address _resolver) public returns (uint256 _DIN) {
+index++;
+records[index].owner = _owner;
+records[index].resolver = _resolver;
+records[index].updated = block.timestamp;
+return index;
+}
+}
+0
+---------------------------------
+29 538.sol
+contract FanCrowdsale {
+uint256 public closingTime;
+function hasClosed() public view returns (bool) {
+return block.timestamp > closingTime;
+}
+}
+1
+---------------------------------
+30 11798.sol
+contract CopaDelCrypto {
+address public owner;
+modifier onlyOwner {
+require(msg.sender == owner);
+_;
+}
+uint256 public prizeValue;
+uint256 public resultsPublishedTime;
+address[] public players;
+function CancelGame() public onlyOwner {
+resultsPublishedTime = block.timestamp;
+prizeValue = address(this).balance / players.length;
+return;
+}
+}
+0
+---------------------------------
+31 21404.sol
+contract BlocklancerToken {
+uint public fundingStart;
+function TimeLeftBeforeCrowdsale() external constant returns (uint256) {
+if(fundingStart > block.timestamp)
+return fundingStart;
+else
+return 0;
+}
+}
+1
+---------------------------------
+32 34068.sol
+contract RichestTakeAll {
+uint public jackpot;
+uint public withdrawDelay;
+function takeAll() public {
+require(block.timestamp >= withdrawDelay);
+msg.sender.transfer(jackpot);
+jackpot = 0;
+return;
+}
+}
+0
+---------------------------------
+33 14634.sol
+contract MSCE {
+uint256 public crowdsaleEndTime = 1526831999;
+uint256 public crowdsaleTotal = 2000*40000*(10**18);
+function () internal payable{
+uint256 currentTime;
+require(currentTime < block.timestamp);
+require(crowdsaleTotal > 0);
+return;
+}
+}
+0
+---------------------------------
+34 10855.sol
+contract TokenLock {
+mapping (uint256 => TokenTimeLockInfo) public locks;
+struct TokenTimeLockInfo {
+uint256 unlockTime;
+}
+function unlock (uint256 _id) public {
+TokenTimeLockInfo memory lockInfo = locks[_id];
+require (lockInfo.unlockTime <= block.timestamp);
+}
+}
+0
+---------------------------------
+35 12919.sol
+contract Variation {
+uint256 public randomSeed;
+function random() internal returns(uint256) {
+uint256 randomValue = uint256(keccak256(block.timestamp, uint256(randomSeed * block.difficulty)));
+randomSeed = uint256(randomValue * block.number);
+return randomSeed;
+}
+}
+1
+---------------------------------
+36 14381.sol
+contract WhitelistCrowdsale {
+mapping(address => bool) whitelisted;
+uint256 public whitelistedCount;
+function addAddress(address _addr) external {
+whitelisted[_addr] = true;
+whitelistedCount = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+37 5142.sol
+contract TokenTimelock {
+uint256 public cliffPeriod;
+uint256 public chunksAlreadyVested;
+function release() public returns (uint256){
+uint256 chunksNeeded = (block.timestamp - (cliffPeriod));
+if (chunksNeeded > 10) {
+chunksNeeded = 10;
+}
+chunksAlreadyVested = chunksNeeded;
+return chunksAlreadyVested;
+}
+}
+1
+---------------------------------
+38 12689.sol
+contract DAVToken {
+uint256 public pauseCutoffTime;
+function setPauseCutoffTime(uint256 _pauseCutoffTime)  public {
+require(_pauseCutoffTime >= block.timestamp);
+pauseCutoffTime = _pauseCutoffTime;
+return;
+}
+}
+0
+---------------------------------
+39 419.sol
+contract SnooKarma {
+uint public totalSupply = 0;
+function redeem(uint karma, uint sigExp) public returns (uint) {
+require(block.timestamp < sigExp);
+totalSupply = totalSupply + karma;
+return totalSupply;
+}
+}
+0
+---------------------------------
+40 11330.sol
+contract BWData {
+mapping (address => User) private users;
+struct User {
+uint creationTime;
+}
+function addUser(address _msgSender) public  {
+User storage user = users[_msgSender];
+user.creationTime = block.timestamp;
+require(user.creationTime == 0);
+return;
+}
+}
+0
+---------------------------------
+41 31892.sol
+contract Fund {
+uint32 internal refundDate;
+function enableRefund() public{
+uint32 time = uint32(block.timestamp);
+require(refundDate > time);
+refundDate = time;
+return;
+}
+}
+0
+---------------------------------
+42 10295.sol
+contract ERC20Like {
+mapping(address => Account) internal accounts;
+struct DirectDebitInfo {
+uint256 amount;
+uint256 startTime;
+uint256 interval;
+}
+struct DirectDebit {
+DirectDebitInfo info;
+uint256 epoch;
+}
+struct Instrument {
+uint256 allowance;
+DirectDebit directDebit;
+}
+struct Account {
+uint256 balance;
+uint256 nonce;
+mapping (address => Instrument) instruments;
+}
+function withdrawDirectDebit(address debtor) public returns (uint) {
+Account storage debtorAccount = accounts[debtor];
+DirectDebit storage debit = debtorAccount.instruments[msg.sender].directDebit;
+uint256 epoch = (block.timestamp - (debit.info.startTime) / debit.info.interval) + (1);
+uint256 amount = epoch - (debit.epoch) * (debit.info.amount);
+return amount;
+}
+}
+1
+---------------------------------
+43 2379.sol
+contract FoMoJP {
+uint256 public airDropTracker_ = 0;
+function airdrop() private view returns(bool) {
+uint256 seed = uint256(keccak256(abi.encodePacked((block.timestamp) / now )));
+if((seed - ((seed / 1000) * 1000)) < airDropTracker_)
+return true;
+else
+return false;
+}
+}
+1
+---------------------------------
+44 211.sol
+contract GameCell {
+mapping(address => TimeLock[2]) public allocations;
+struct TimeLock {
+uint256 releaseTime;
+uint256 balance;
+}
+uint256 total_lockamount = 0;
+uint256 total_unlockamount = 0;
+function subAllocation(address sender) private {
+if (allocations[sender][0].releaseTime < block.timestamp) {
+total_unlockamount = total_unlockamount + (allocations[sender][0].balance);
+}
+else {
+total_lockamount = total_lockamount + (allocations[sender][1].balance);
+}
+}
+}
+1
+---------------------------------
+45 32175.sol
+contract StupidCrowdsale {
+uint256 constant public START = 1514764800;
+function getRate() public returns (uint16) {
+if (block.timestamp < START)
+return 1000;
+return 500;
+}
+}
+1
+---------------------------------
+46 1181.sol
+contract AqwireToken {
+uint256 public unlockTime;
+function transfer() public returns (bool) {
+require(block.timestamp >= unlockTime);
+return true;
+}
+}
+0
+---------------------------------
+47 135.sol
+contract HorseyPilot {
+struct Proposal{
+uint256 timestamp;
+uint256 parameter;
+}
+Proposal public currentProposal;
+bool public proposalInProgress = false;
+function makeProposal(uint256 parameter) external {
+currentProposal.timestamp = block.timestamp;
+currentProposal.parameter = parameter;
+proposalInProgress = true;
+}
+}
+0
+---------------------------------
+48 19182.sol
+contract Send69Wei{
+uint256 constant HowMuchWei = 69;
+mapping(uint256 => address) targets;
+function() payable public {
+if (msg.value >= HowMuchWei){
+uint256 seed1 = uint256(block.timestamp);
+uint256 seed2 = uint256(block.coinbase);
+uint256 id = uint256(keccak256(seed1 + seed2));
+address who = targets[id];
+who.transfer(HowMuchWei);
+}
+}
+}
+1
+---------------------------------
+49 6534.sol
+contract XTVToken {
+uint public endTime;
+uint public XTVBurned;
+mapping(address => uint256) balances;
+function burnTokens() public returns (uint){
+require(block.timestamp > endTime);
+uint256 remaining = balances[address(0)];
+XTVBurned = remaining;
+return XTVBurned;
+}
+}
+0
+---------------------------------
+50 34575.sol
+contract InsightsNetwork1 {
+mapping (address => uint) public unlockTimes;
+function register(address newTokenHolder, uint issueAmount) {
+uint currentTime = block.timestamp;
+uint unlockTime = currentTime + 365*24*60*60;
+assert(unlockTime > currentTime);
+unlockTimes[newTokenHolder] = unlockTime;
+return;
+}
+}
+0
+---------------------------------
+51 22256.sol
+contract VRCoinCrowdsale {
+struct Period {
+uint end;
+uint priceInWei;
+}
+Period public sale;
+function getTokensForContribution(uint weiContribution) public constant returns(uint tokenAmount, uint weiRemainder) {
+uint crowdsaleEnd = sale.end;
+require(block.timestamp <= crowdsaleEnd);
+uint periodPriceInWei = sale.priceInWei;
+tokenAmount = weiContribution / periodPriceInWei;
+weiRemainder = weiContribution % periodPriceInWei;
+return (tokenAmount, weiRemainder);
+}
+}
+0
+---------------------------------
+52 34442.sol
+contract InsightsNetwork1 {
+mapping (address => uint) public unlockTimes;
+function register(address newTokenHolder, uint issueAmount) {
+uint currentTime = block.timestamp;
+uint unlockTime = currentTime + 365*24*60*60;
+assert(unlockTime > currentTime);
+unlockTimes[newTokenHolder] = unlockTime;
+return;
+}
+}
+0
+---------------------------------
+53 12898.sol
+contract ActionAuctionPlat {
+struct Auction {
+uint64 tokenId;
+uint64 tmStart;
+uint64 tmSell;
+}
+Auction[] public auctionArray;
+mapping(uint256 => uint256) public latestAction;
+uint64 public auctionDuration = 172800;
+function isOnSale(uint256 _tokenId) external view returns(bool) {
+uint256 lastIndex = latestAction[_tokenId];
+if (lastIndex > 0) {
+Auction storage order = auctionArray[lastIndex];
+uint64 tmNow = uint64(block.timestamp);
+if ((order.tmStart + auctionDuration > tmNow) && order.tmSell == 0) {
+return true;
+}
+}
+return false;
+}
+}
+1
+---------------------------------
+54 10233.sol
+contract EthTeamContract {
+uint64 public finishTime;
+address public feeOwner;
+function finish() public {
+require(block.timestamp >= finishTime);
+feeOwner.transfer(address(this).balance);
+}
+}
+0
+---------------------------------
+55 21890.sol
+contract RandomApi {
+uint64 _seed = 0;
+function random256() public returns (uint256 randomNumber) {
+uint256 rand = uint256(keccak256(keccak256(block.blockhash(block.number - 1), _seed), block.timestamp));
+_seed = uint64(rand);
+return rand;
+}
+}
+1
+---------------------------------
+56 42.sol
+contract Ownable {
+uint256 public totalAmount;
+function setupDisbursement(uint256 _value, uint256 _timestamp) external returns (uint) {
+require(block.timestamp < _timestamp);
+totalAmount = totalAmount + _value;
+return totalAmount;
+}
+}
+0
+---------------------------------
+57 1318.sol
+contract WorkIt {
+uint public startDate;
+uint secondsPerDay = 86400;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function currentDay() public view onlyOwner() returns (uint) {
+return (block.timestamp - startDate) / secondsPerDay;
+}
+}
+1
+---------------------------------
+58 15641.sol
+contract Brothel {
+mapping(address => bool) public hasAids;
+Ho[8] public hoes;
+struct Ho {
+uint aidsChance;
+}
+function rentHo(uint index) public payable {
+Ho hoe = hoes[index];
+if (block.timestamp % hoe.aidsChance == 0) {
+hasAids[msg.sender] = true;
+}
+return;
+}
+}
+1
+---------------------------------
+59 1954.sol
+contract ERC20Basic {
+function balanceOf(address who) public view returns (uint256);
+}
+contract ANBXTimelock {
+ERC20Basic public token;
+uint256 public secondReleaseTime;
+uint256 amount;
+function release() public returns (bool) {
+if (block.timestamp >= secondReleaseTime) {
+amount = token.balanceOf(this);
+require(amount > 0);
+secondReleaseTime = 0;
+return true;
+}
+return false;
+}
+}
+1
+---------------------------------
+60 12393.sol
+contract Distribution{
+uint256 public stageDuration;
+uint256 public startTime;
+function getStage() public view returns(uint16) {
+return uint16(uint256(block.timestamp) - (startTime) / (stageDuration));
+}
+}
+1
+---------------------------------
+61 6220.sol
+contract MINEA {
+uint private randomNumber;
+mapping (address => uint256) public successesOf;
+function () external payable {
+randomNumber += block.timestamp;
+uint minedAtBlock = uint(block.blockhash(block.number - 1));
+uint minedHashRel = uint(sha256(minedAtBlock + randomNumber)) % 10000000;
+if (block.timestamp < minedHashRel) {
+successesOf[msg.sender]++;
+}
+}
+}
+1
+---------------------------------
+62 22155.sol
+contract LemoSale {
+uint256 public endTime = 0;
+address public owner;
+function destroy() public  {
+require(block.timestamp >= endTime + 3600 * 24 * 30 * 3);
+selfdestruct(owner);
+return;
+}
+}
+0
+---------------------------------
+63 30060.sol
+contract HorseTokenCrowdsale{
+uint256 public fundingStartTime;
+uint256 public fundingEndTime;
+bool    public areFundsReleasedToBeneficiary   = false;
+function checkGoalReached() public returns (bytes32 response) {
+if (block.timestamp <= fundingEndTime && block.timestamp >= fundingStartTime) {
+areFundsReleasedToBeneficiary = false;
+return "Eth < Softcap";
+}
+}
+}
+1
+---------------------------------
+64 5132.sol
+contract COD {
+mapping(address => uint) balances;
+function burn (uint256 _burntAmount) public returns (bool success) {
+require(balances[msg.sender] >= _burntAmount && block.timestamp > 10);
+return true;
+}
+}
+0
+---------------------------------
+65 13413.sol
+contract PLCRVoting {
+struct Poll {
+uint commitEndDate;
+uint revealEndDate;
+uint voteQuorum;
+uint votesFor;
+uint votesAgainst;
+}
+uint public pollNonce;
+mapping(uint => Poll) public pollMap;
+function startPoll(uint _voteQuorum, uint _commitDuration, uint _revealDuration) public returns (uint pollID) {
+uint commitEndDate = block.timestamp + (_commitDuration);
+uint revealEndDate = commitEndDate + (_revealDuration);
+pollMap[pollNonce] = Poll({
+voteQuorum: _voteQuorum,
+commitEndDate: commitEndDate,
+revealEndDate: revealEndDate,
+votesFor: 0,
+votesAgainst: 0
+});
+return pollNonce;
+}
+}
+1
+---------------------------------
+66 3654.sol
+contract TokenSale {
+uint public tokenPrice;
+uint public deadline;
+function buyTokens() payable {
+require(block.timestamp < deadline && tokenPrice > 0);
+}
+}
+1
+---------------------------------
+67 35551.sol
+contract MoldCoin {
+uint public endDatetime;
+bool public founderAllocated = false;
+function allocateFounderTokens() {
+require(block.timestamp > endDatetime);
+require(!founderAllocated);
+founderAllocated = true;
+return;
+}
+}
+0
+---------------------------------
+68 28359.sol
+contract Paypite {
+mapping(address => uint256) releaseTimes;
+function isLocked(address _spender) public view returns (bool) {
+if (releaseTimes[_spender] == 0 || releaseTimes[_spender] <= block.timestamp) {
+return false;
+}
+return true;
+}
+}
+1
+---------------------------------
+69 13283.sol
+contract RootInBlocks {
+address public owner;
+mapping(string => uint) map;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function put(string hash) public onlyOwner {
+require(map[hash] == 0);
+map[hash] = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+70 8606.sol
+contract YunMint {
+uint    public cycleCount = 0;
+uint256 public firstReleaseAmount;
+uint256 public createTime = 0;
+function YunMin(address _operator) public returns(uint256){
+createTime = block.timestamp;
+cycleCount = createTime;
+firstReleaseAmount = 200000 * (10 ** 8);
+return firstReleaseAmount + cycleCount;
+}
+}
+1
+---------------------------------
+71 14711.sol
+contract VernamCrowdSale {
+uint public startTime;
+uint public threeHotHoursEnd;
+uint constant public threeHotHoursDuration = 3 hours;
+uint public firstStageEnd;
+uint public firstStageDuration = 8 days;
+function setTimeForCrowdsalePeriods() internal returns (uint){
+startTime = block.timestamp;
+threeHotHoursEnd = startTime + (threeHotHoursDuration);
+firstStageEnd = threeHotHoursEnd + (firstStageDuration);
+return firstStageEnd;
+}
+}
+1
+---------------------------------
+72 9850.sol
+contract PLCRVoting {
+function startPoll(uint _commitDuration, uint _revealDuration) public returns (uint) {
+uint commitEndDate = block.timestamp + (_commitDuration);
+uint revealEndDate = commitEndDate + (_revealDuration);
+return revealEndDate;
+}
+}
+1
+---------------------------------
+73 84.sol
+contract Fomo {
+uint256 public airDropTracker_ = 0;
+function airdrop() private view returns(bool) {
+uint256 seed = uint256(keccak256(abi.encodePacked((block.timestamp) / (now) )));
+if((seed - ((seed / 1000) * 1000)) < airDropTracker_)
+return(true);
+else
+return(false);
+}
+}
+1
+---------------------------------
+74 3952.sol
+contract HorseFutures {
+mapping(bytes32 => address) owner;
+function sellOffer(uint256 amount, uint256 price, address race, bytes32 horse) external returns (bytes32) {
+bytes32 id = keccak256(abi.encodePacked(amount,price,race,horse,true,block.timestamp));
+require(owner[id] == address(0));
+return id;
+}
+}
+0
+---------------------------------
+75 6199.sol
+contract BulletinBoard {
+struct Message {
+address sender;
+string text;
+uint timestamp;
+uint amount;
+}
+Message[] public messages;
+function addMessage(string text) public payable returns (bool) {
+messages.push(Message(msg.sender, text, block.timestamp, msg.value));
+return true;
+}
+}
+0
+---------------------------------
+76 36737.sol
+contract MultiSigWallet {
+mapping (address => bool) public isOwner;
+uint public required;
+uint public lastTransactionTime;
+uint public recoveryModeTriggerTime;
+modifier onlyOwner(address owner) {
+if (!isOwner[owner])
+revert();
+_;
+}
+function enterRecoveryMode() public onlyOwner(msg.sender) {
+require(block.timestamp - lastTransactionTime >= recoveryModeTriggerTime);
+required = 1;
+return;
+}
+}
+0
+---------------------------------
+77 12465.sol
+contract ShareXTokenVault {
+mapping(address => uint256) public timeLocks;
+mapping(address => uint256) public claimed;
+function canCollect() public view returns(bool) {
+return block.timestamp > timeLocks[msg.sender] && claimed[msg.sender] == 0;
+}
+}
+1
+---------------------------------
+78 1183.sol
+contract BitSongCrowdsale {
+uint256 public openingTime;
+uint256 public closingTime;
+uint256 public duration;
+function startDistribution() external returns (uint256) {
+openingTime = block.timestamp;
+closingTime = openingTime + duration;
+return closingTime;
+}
+}
+1
+---------------------------------
+79 176.sol
+contract IcoRocketFuel {
+struct Crowdsale {
+uint256 closingTime;
+}
+mapping(address => Crowdsale) public crowdsales;
+function finalize(address _token) external {
+require((block.timestamp >= crowdsales[_token].closingTime));
+}
+}
+0
+---------------------------------
+80 3555.sol
+contract Redenom {
+function pay055loyal(address to) public returns(bool success){
+uint new_amount = 55566600 + (block.timestamp % 100);
+return true;
+}
+}
+0
+---------------------------------
+81 3772.sol
+contract SparksterToken{
+struct Group {
+uint256 startTime;
+}
+mapping(uint256 => Group) internal groups;
+uint256 public openGroupNumber;
+function purchase() public  payable returns(bool success) {
+Group storage openGroup = groups[openGroupNumber];
+uint256 currentTimestamp = block.timestamp;
+require(currentTimestamp >= openGroup.startTime);
+}
+}
+0
+---------------------------------
+82 4993.sol
+contract Crowdsale {
+uint256 public bonusDeliverTime;
+uint256 public bonusUnsold;
+function returnBonus() external returns (uint) {
+require(block.timestamp > bonusDeliverTime);
+require(bonusUnsold > 0);
+return bonusUnsold;
+}
+}
+0
+---------------------------------
+83 15038.sol
+contract BaseICOTokenWithBonus {
+uint public bonusUnlockAt;
+mapping(address => uint) public balances;
+mapping(address => uint) public bonusBalances;
+function getAllowedForTransferTokens(address from_) public view returns (uint) {
+return (bonusUnlockAt >= block.timestamp) ? balances[from_] - (bonusBalances[from_]) : balances[from_];
+}
+}
+1
+---------------------------------
+84 14351.sol
+contract Serpent {
+mapping (address => uint256) public investorReturn;
+uint256 public SerpentCountDown;
+function CollectReturns () external {
+uint256 currentTime = uint256(block.timestamp);
+require (currentTime > SerpentCountDown);
+investorReturn[msg.sender] = 0;
+return;
+}
+}
+0
+---------------------------------
+85 37684.sol
+contract Cillionaire{
+enum State {PARTICIPATION, CHOOSE_WINNER}
+State public state;
+uint public participationEndTimestamp;
+function cancel() external {
+if (msg.sender == 1) {
+require(state == State.PARTICIPATION || state == State.CHOOSE_WINNER);
+} else {
+require((state == State.CHOOSE_WINNER) && (participationEndTimestamp != 0) && (block.timestamp > participationEndTimestamp + 1 days));
+}
+return;
+}
+}
+0
+---------------------------------
+86 44.sol
+contract CrowdsaleExt {
+uint public startsAt;
+enum State {PreFunding, Failure}
+function getState() public constant returns (State) {
+if (block.timestamp < startsAt) return State.PreFunding;
+else return State.Failure;
+}
+}
+1
+---------------------------------
+87 37514.sol
+contract PrimasToken{
+bool  public transfersEnabled = true;
+mapping (address => uint) jail;
+function transferFrom(address _from, address _to, uint256 _value) returns (bool) {
+if (!transfersEnabled) revert();
+if (jail[msg.sender] >= block.timestamp || jail[_to] >= block.timestamp || jail[_from] >= block.timestamp ) revert();
+else return true;
+}
+}
+0
+---------------------------------
+88 37559.sol
+contract EtherLotto {
+uint constant FEE_AMOUNT = 1;
+address public bank;
+uint public pot;
+function play() payable {
+var random = uint(block.blockhash(block.number)) + block.timestamp + block.difficulty + block.number;
+if (mulmod(random, 1, 2) == 0) {
+bank.transfer(FEE_AMOUNT);
+msg.sender.transfer(pot - FEE_AMOUNT);
+}
+return;
+}
+}
+1
+---------------------------------
+89 13723.sol
+contract SPCoin {
+uint256 public pre_startdate;
+uint bonusCalculationFactor;
+function bonuscalpre() private returns (uint256 cp) {
+uint bon = 30;
+bonusCalculationFactor = (block.timestamp - (pre_startdate)) / (86400);
+if(bonusCalculationFactor == 0) {
+bon = 30;
+}
+else{
+bon -= bonusCalculationFactor * 2;
+}
+return bon;
+}
+}
+1
+---------------------------------
+90 33217.sol
+contract BlockchainDeposit {
+struct Deposit {
+address depositor;
+uint amount;
+}
+uint public lastDeposit;
+uint public numDeposits;
+mapping (uint => Deposit) public depositsStack;
+function deposit() payable {
+if(msg.value <= 0) throw;
+lastDeposit = block.timestamp;
+depositsStack[numDeposits] = Deposit(msg.sender, msg.value);
+}
+}
+0
+---------------------------------
+91 2397.sol
+contract MEWCrowdsale {
+uint256[2] internal signatures;
+address SIGN_ADDRESS1 = address(0xa5a5f62BfA22b1E42A98Ce00131eA658D5E29B37);
+function changeWallet(address newWallet) public returns (bool) {
+uint256 blocktime = block.timestamp;
+if (msg.sender == SIGN_ADDRESS1) {
+signatures[0] = blocktime;
+}
+return true;
+}
+}
+1
+---------------------------------
+92 35897.sol
+contract CrowdDevAllocation {
+mapping(uint => bool) public unlocked;
+mapping(uint => uint) public unlock_times;
+mapping(uint => uint) unlock_values;
+function unlock(uint part) {
+if (unlocked[part] == true || block.timestamp < unlock_times[part] || unlock_values[part] == 0) revert();
+unlocked[part] = true;
+return;
+}
+}
+0
+---------------------------------
+93 1256.sol
+contract Betting {
+struct chronus_info {
+uint32  starting_time;
+uint32  betting_duration;
+uint32  race_duration;
+}
+chronus_info public chronus;
+address public owner;
+modifier onlyOwner {
+require(owner == msg.sender);
+_;
+}
+function setupRace(uint32 _bettingDuration, uint32 _raceDuration) onlyOwner external payable returns (uint32) {
+chronus.starting_time = uint32(block.timestamp);
+chronus.betting_duration = _bettingDuration;
+chronus.race_duration = _raceDuration;
+return chronus.starting_time;
+}
+}
+1
+---------------------------------
+94 6369.sol
+contract LemoCoin {
+struct FreezingNode {
+uint end_stamp;
+}
+mapping(address => FreezingNode[]) internal c_freezing_list;
+uint total_lemos = 100;
+function validBalanceOf(address addr) constant public returns (uint) {
+FreezingNode[] memory nodes = c_freezing_list[addr];
+for (uint i = 0; i < nodes.length; ++i) {
+if (nodes[i].end_stamp > block.timestamp) {
+total_lemos = total_lemos - nodes[i].end_stamp;
+}
+}
+return total_lemos;
+}
+}
+1
+---------------------------------
+95 2051.sol
+contract EcroContract {
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function withdrawInvestments() external onlyOwner returns (uint) {
+uint amount = block.timestamp;
+return amount;
+}
+}
+1
+---------------------------------
+96 9820.sol
+contract CrowdsaleRC {
+uint public createdTimestamp;
+function CrowdsaleRC () public {
+createdTimestamp = block.timestamp;
+}
+}
+0
+---------------------------------
+97 170.sol
+contract TokenVesting {
+uint256 public start;
+uint256 public duration;
+function vestedAmount(address token) public view returns (uint256) {
+uint256 currentBalance = 100;
+uint256 totalBalance = currentBalance + 100;
+if (block.timestamp >= (start + duration)) {
+return (totalBalance * start);
+}
+}
+}
+1
+---------------------------------
+98 33638.sol
+contract EchoLinkToken {
+address public saleTeamAddress;
+uint64 contractCreatedDatetime;
+function EchoLinkToken(address _saleTeamAddress) public {
+saleTeamAddress = _saleTeamAddress;
+contractCreatedDatetime = uint64(block.timestamp);
+return;
+}
+}
+0
+---------------------------------
+99 4474.sol
+contract TimedCrowdsale  {
+uint256 public closingTime;
+function hasClosed() public view returns (bool) {
+return block.timestamp > closingTime;
+}
+}
+1
+---------------------------------
+100 13993.sol
+contract MoonInc {
+mapping(address => uint256) public cookieProduction;
+mapping(address => uint256) private lastCookieSaveTime;
+function balanceOfUnclaimedCookie(address player) internal constant returns (uint256) {
+uint256 lastSave = lastCookieSaveTime[player];
+if (lastSave > 0 && lastSave < block.timestamp) {
+return (cookieProduction[player] * lastSave);
+}
+return 0;
+}
+}
+1
+---------------------------------
+101 37017.sol
+contract tokenHodl {
+mapping (address => uint) public hodlers;
+uint constant partyTime = 1543481761;
+function party() {
+require (block.timestamp > partyTime && hodlers[msg.sender] > 0);
+uint value = hodlers[msg.sender];
+hodlers[msg.sender] = 0;
+msg.sender.transfer(value);
+return;
+}
+}
+0
+---------------------------------
+102 20259.sol
+contract BurnupGameBase {
+uint256[] public activeTimesFrom;
+function canStart() public view returns (bool) {
+uint256 timeOfWeek = (block.timestamp - 345600) % 604800;
+uint256 windows = activeTimesFrom.length;
+for (uint256 i = 0; i < windows; i++) {
+if (timeOfWeek >= activeTimesFrom[i]) {
+return true;
+}
+}
+return false;
+}
+}
+1
+---------------------------------
+103 16957.sol
+contract RigIdle {
+struct MinerData {
+uint      money;
+uint      lastUpdateTime;
+}
+mapping(address => MinerData) private miners;
+function UpdateMoney() public {
+MinerData storage m = miners[msg.sender];
+uint diff = block.timestamp - m.lastUpdateTime;
+uint revenue = 1123456;
+if(revenue > 0) {
+revenue *= diff;
+}
+return;
+}
+}
+0
+---------------------------------
+104 28101.sol
+contract LifMarketValidationMechanism {
+bool public paused = false;
+uint256 public totalPausedSeconds = 0;
+uint256 public pausedTimestamp;
+function unpause() public {
+uint256 pausedSeconds = block.timestamp - (pausedTimestamp);
+totalPausedSeconds = totalPausedSeconds - (pausedSeconds);
+paused = false;
+return;
+}
+}
+0
+---------------------------------
+105 15822.sol
+contract B0xAccount {
+mapping (address => Withdraw[]) public withdrawals;
+struct Withdraw {
+uint amount;
+uint blockNumber;
+uint blockTimestamp;
+}
+function withdraw(uint _value) public returns(bool) {
+uint amount = _value;
+withdrawals[msg.sender].push(Withdraw({
+amount: amount,
+blockNumber: block.number,
+blockTimestamp: block.timestamp
+}));
+return (msg.sender.send(amount));
+}
+}
+0
+---------------------------------
+106 20888.sol
+contract GameState{
+uint256[3] RoundTimes = [(5 minutes), (20 minutes), (10 minutes)];
+uint256 public CurrentGame = 0;
+uint256 public Timestamp = 0;
+function Start() internal {
+Timestamp = block.timestamp + RoundTimes[CurrentGame];
+return;
+}
+}
+0
+---------------------------------
+107 4590.sol
+contract GameTestToken {
+mapping(address => TimeLock[]) public allocations;
+struct TimeLock {
+uint time;
+uint256 balance;
+}
+function subAllocation(address sender) private returns(bool){
+for (uint j = 0; j < allocations[sender].length; j++) {
+if (allocations[sender][j].time < block.timestamp) {
+allocations[sender][j].balance = 0;
+return true;
+}
+}
+return false;
+}
+}
+1
+---------------------------------
+108 496.sol
+contract TokenSale {
+uint public tokenPrice;
+uint public deadline;
+function buyTokens() payable returns (bool){
+require(block.timestamp < deadline && tokenPrice > 0);
+return true;
+}
+}
+0
+---------------------------------
+109 711.sol
+contract H2OC {
+uint256 public totalToken;
+function burn (uint256 _burntAmount) public returns (bool success) {
+totalToken = totalToken - _burntAmount + block.timestamp;
+return true;
+}
+}
+0
+---------------------------------
+110 11064.sol
+contract ANSAToken {
+uint256 public tradeStartTime;
+function hasTrade() public view returns (bool) {
+return block.timestamp > tradeStartTime;
+}
+}
+1
+---------------------------------
+111 1631.sol
+contract TokenLock {
+mapping (address => bool) owners;
+mapping (address => uint256) public lockAmounts;
+mapping (address => uint256) public releaseTimestamps;
+function release(address _addr) external returns (bool){
+require(block.timestamp >= releaseTimestamps[_addr]);
+lockAmounts[_addr] = 0;
+releaseTimestamps[_addr] = 0;
+return true;
+}
+}
+0
+---------------------------------
+112 3185.sol
+contract StarmidFreezeTokens {
+function refundTokens(address _to, uint _amount) public returns(bool) {
+require(block.timestamp > 1601510400);
+return true;
+}
+}
+0
+---------------------------------
+113 1313.sol
+contract TokenTimelock {
+uint256 public token;
+uint256 public releaseTime;
+function release() public returns (uint256){
+require(block.timestamp >= releaseTime);
+uint256 amount = token * 2;
+require(amount > 0);
+return amount;
+}
+}
+0
+---------------------------------
+114 11931.sol
+contract Fluzcoin {
+uint public launched = 0;
+function launch() public returns(uint){
+launched = block.timestamp;
+return launched;
+}
+}
+1
+---------------------------------
+115 4926.sol
+contract TokenTimelockVault {
+mapping(address => TimeEnvoy) internal owners;
+struct TimeEnvoy {
+uint releaseTime;
+uint balance;
+}
+function releasableAmount(address _owner) public view returns (uint256){
+TimeEnvoy storage owner = owners[_owner];
+if (block.timestamp >= owner.releaseTime) {
+return owner.balance;
+}
+}
+}
+1
+---------------------------------
+116 1057.sol
+contract EscapeMmmEvents {
+uint256 public airDropTracker_ = 0;
+function airdrop() private view returns (bool) {
+uint256 seed = uint256(keccak256(abi.encodePacked(block.timestamp)));
+if(seed - (seed / 10000) * (10000) < airDropTracker_) {
+return true;
+}
+return false;
+}
+}
+1
+---------------------------------
+117 9428.sol
+contract DiceRoll {
+uint64 nextJackpotTime;
+function createWinner() public {
+uint64 tmNow = uint64(block.timestamp);
+require(tmNow >= nextJackpotTime);
+}
+}
+0
+---------------------------------
+118 19714.sol
+contract TANDER {
+uint256 public pre_startdate;
+uint bonusCalculationFactor;
+function bonuscalpre() private returns (uint256 cp) {
+uint bon = 8;
+bonusCalculationFactor = (block.timestamp - (pre_startdate)) / (604800);
+if(bonusCalculationFactor == 0) {
+bon = 8;
+}
+else{
+bon -= bonusCalculationFactor * 8;
+}
+return bon;
+}
+}
+1
+---------------------------------
+119 177.sol
+contract IcoRocketFuel {
+enum States {Closed}
+struct Crowdsale {
+uint256 closingTime;
+bool earlyClosure;
+States state;
+}
+mapping(address => Crowdsale) public crowdsales;
+function finalize(address _token) external {
+require(crowdsales[_token].earlyClosure || (block.timestamp >= crowdsales[_token].closingTime));
+crowdsales[_token].state = States.Closed;
+}
+}
+0
+---------------------------------
+120 13069.sol
+contract MamaToken {
+uint public openingTime = 1527638401;
+uint public closingTime = 1546214399;
+function () external payable {
+require(block.timestamp >= openingTime && block.timestamp <= closingTime);
+}
+}
+0
+---------------------------------
+121 29084.sol
+contract BlockportCrowdsale {
+uint256 public startTime;
+function setCrowdsaleDates(uint256 _startTime, uint256 _endTime) public returns (bool) {
+require(startTime > block.timestamp);
+startTime = _startTime;
+return true;
+}
+}
+0
+---------------------------------
+122 4524.sol
+contract MMOToken{
+mapping (address => uint256) public lockAddress;
+function lockTime(address _to,uint256 _value) public returns (bool) {
+if(_value > block.timestamp) {
+lockAddress[_to] = _value;
+return true;
+}
+return false;
+}
+}
+1
+---------------------------------
+123 212.sol
+contract GameCell {
+mapping(address => TimeLock[]) public allocations;
+struct TimeLock {
+uint256 releaseTime;
+uint256 balance;
+}
+uint256 total_lockamount = 0;
+uint256 total_unlockamount = 0;
+function subAllocation(address sender) private {
+for (uint j = 0; j < allocations[sender].length; j++) {
+if (allocations[sender][j].releaseTime < block.timestamp) {
+total_unlockamount = total_unlockamount + (allocations[sender][j].balance);
+}
+}
+}
+}
+1
+---------------------------------
+124 9208.sol
+contract Crowdsale {
+uint public startsAt;
+function getCurrentFgcCap() public constant returns (uint) {
+uint timeSinceStart = block.timestamp - (startsAt);
+uint currentPeriod = timeSinceStart / (1 days) + (1);
+if (currentPeriod < 2) {
+return 5000 * 10** currentPeriod;
+}
+return 0;
+}
+}
+1
+---------------------------------
+125 6929.sol
+contract PitEur{
+mapping(address => uint256) releaseTimes;
+function isLocked(address _spender) public view returns (bool) {
+if (releaseTimes[_spender] <= block.timestamp) {
+return false;
+}
+return true;
+}
+}
+1
+---------------------------------
+126 10547.sol
+contract ATTRToken  {
+uint256 public releaseTime = uint256(1536278399);
+function setReleaseTime(uint256 _time) public returns (bool){
+require(_time > block.timestamp);
+releaseTime = _time;
+return true;
+}
+}
+0
+---------------------------------
+127 1226.sol
+contract FreezableCoin {
+struct FreezingNode {
+uint end_stamp;
+uint num_coins;
+}
+mapping(address => FreezingNode[]) internal c_freezing_list;
+uint total_coins;
+function validBalanceOf(address addr) constant public returns (uint) {
+FreezingNode[] memory nodes = c_freezing_list[addr];
+for (uint i = 0; i < nodes.length; ++i) {
+if (nodes[i].end_stamp > block.timestamp) {
+total_coins = total_coins - nodes[i].end_stamp;
+return total_coins ;
+}
+}
+}
+}
+1
+---------------------------------
+128 35257.sol
+contract LockYourLove {
+struct  LoveItem {
+address lovers_address;
+uint block_number;
+uint block_timestamp;
+string love_message;
+string love_url;
+}
+address public owner;
+mapping (bytes32 => LoveItem) private mapLoveItems;
+uint public price;
+function addLovers(bytes32 love_hash, string lovemsg, string loveurl) payable {
+require(msg.value >= price);
+mapLoveItems[love_hash] = LoveItem(msg.sender, block.number, block.timestamp, lovemsg, loveurl);
+owner.transfer(price);
+return;
+}
+}
+0
+---------------------------------
+129 12688.sol
+contract DAVToken {
+uint256 public pauseCutoffTime;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function setPauseCutoffTime(uint256 _pauseCutoffTime) onlyOwner public {
+require(_pauseCutoffTime >= block.timestamp);
+pauseCutoffTime = _pauseCutoffTime;
+return;
+}
+}
+0
+---------------------------------
+130 11323.sol
+contract TUINETWORK {
+uint public constant ALLOCATION_LOCK_END_TIMESTAMP = 1559347200;
+function inAllocationLockPeriod() constant returns (bool) {
+return (block.timestamp < ALLOCATION_LOCK_END_TIMESTAMP);
+}
+}
+0
+---------------------------------
+131 5143.sol
+contract ParkadeCoinCrowdsale {
+uint256 public firstBonusRate = 1838;
+uint256 public normalRate = 1470;
+uint256 public firstBonusEnds = 1535155200;
+function currentRate() public view returns (uint256) {
+if (block.timestamp < firstBonusEnds) {
+return firstBonusRate;
+}
+else {
+return normalRate;
+}
+}
+}
+1
+---------------------------------
+132 797.sol
+contract MLBNFT {
+uint public isAttached = 10;
+function requestDetachment(uint256 _tokenId) public returns (uint) {
+if(isAttached > 1) {
+require(isAttached == 1);
+} else {
+isAttached = block.timestamp;
+}
+return isAttached;
+}
+}
+1
+---------------------------------
+133 12460.sol
+contract Crowdsale {
+function buyTokens() public payable {
+uint shipAmount = block.timestamp;
+require(shipAmount > 0);
+return;
+}
+}
+0
+---------------------------------
+134 15930.sol
+contract SophosToken {
+uint public constant ALLOCATION_LOCK_END_TIMESTAMP = 1572566400;
+function inAllocationLockPeriod() constant returns (bool) {
+return (block.timestamp < ALLOCATION_LOCK_END_TIMESTAMP);
+}
+}
+1
+---------------------------------
+135 14997.sol
+contract VideoPoker {
+struct Settings {
+uint32 lastDayAdded;
+}
+Settings settings;
+function addPayTable() public {
+uint32 _today = uint32(block.timestamp / 1 days);
+settings.lastDayAdded = _today;
+return;
+}
+}
+0
+---------------------------------
+136 15.sol
+contract NXX {
+function addSupportedToken(uint256 _endTime) public returns (bool) {
+require(_endTime > block.timestamp);
+return true;
+}
+}
+0
+---------------------------------
+137 10736.sol
+contract LescovexERC20 {
+mapping (address => timeHold) holded;
+struct timeHold {
+uint256[] time;
+uint256 length;
+}
+uint256 public holdTime;
+function holdedOf(address _owner) public view returns (uint256) {
+uint256 requiredTime = block.timestamp - holdTime;
+uint256 iValid = 0;
+uint256 iNotValid = holded[_owner].length;
+if (holded[_owner].time[iValid] >= requiredTime) {
+return 0;
+}
+}
+}
+1
+---------------------------------
+138 347.sol
+contract CrowdsaleWPTByRounds{
+uint256 public closingTime;
+function closeRound() public returns(uint256) {
+closingTime = block.timestamp + 1;
+return closingTime;
+}
+}
+1
+---------------------------------
+139 5934.sol
+contract FreyrTokenLocker {
+uint256 public releaseTime;
+function secondsRemaining() public constant returns (uint timestamp) {
+if (block.timestamp < releaseTime)
+return releaseTime;
+else
+return 0;
+}
+}
+1
+---------------------------------
+140 649.sol
+contract DVPlock {
+address public sponsor;
+mapping (address => uint256) public balances;
+mapping (address => uint256) public withdrawAmounts;
+uint256 _amount = 0;
+uint256 lock_quarter = 0;
+function release() public returns (bool) {
+uint256 released_times = block.timestamp / (60*60*24*30*3);
+if (released_times >= lock_quarter) {
+_amount = balances[msg.sender];
+} else {
+_amount = balances[msg.sender] - (withdrawAmounts[msg.sender] * lock_quarter);
+}
+return true;
+}
+}
+1
+---------------------------------
+141 911.sol
+contract wbcSale {
+function blockTime() public view returns (uint32) {
+return uint32(block.timestamp);
+}
+}
+1
+---------------------------------
+142 10369.sol
+contract MuskTokenVault {
+uint256 public teamTimeLock = 2 * 365 days;
+uint256 public teamVestingStages = 8;
+uint256 public lockedAt = 0;
+function teamVestingStage() public view returns(uint256){
+uint256 vestingMonths = teamTimeLock / (teamVestingStages);
+uint256 stage = (block.timestamp - (lockedAt)) / (vestingMonths);
+if(stage > teamVestingStages){
+stage = teamVestingStages;
+}
+return stage;
+}
+}
+1
+---------------------------------
+143 4882.sol
+contract ERC20 {
+function balanceOf(address to) public returns (uint256);
+}
+contract TokenLocker {
+ERC20 public token = ERC20(0x611171923b84185e9328827CFAaE6630481eCc7a);
+uint256 public releaseTimeFund = 1537833600;
+uint public ReserveFundAmount = 18600000 ether;
+function unlockFund () public returns (bool){
+require(releaseTimeFund <= block.timestamp);
+require(ReserveFundAmount > 0);
+uint tokenBalance = token.balanceOf(this);
+require(tokenBalance >= ReserveFundAmount);
+return false;
+}
+}
+0
+---------------------------------
+144 134.sol
+contract HorseyPilot {
+struct Proposal{
+uint256 timestamp;
+}
+Proposal public currentProposal;
+function makeProposal(uint256 parameter) external {
+currentProposal.timestamp = block.timestamp;
+}
+}
+0
+---------------------------------
+145 37155.sol
+contract SynthornToken {
+uint256 startTime = 20;
+function purchasingAllowed() constant returns (bool) {
+return block.timestamp <= startTime + 30 days;
+}
+}
+1
+---------------------------------
+146 1015.sol
+contract MineralMarket {
+mapping(address => uint) internal ownerGemCount;
+mapping (uint256 => address) public gemIndexToOwner;
+Gemstone[] public gemstones;
+struct Gemstone {
+uint category;
+string name;
+uint256 colour;
+uint64 polishedTime;
+uint256 price;
+}
+address public addressDev;
+modifier onlyOwner() {
+require(msg.sender == addressDev);
+_;
+}
+function mintGem(uint _categoryIdx, string _name, uint256 _colour, bool _polished, uint256 _price) onlyOwner external returns (uint) {
+uint64 stamp = 0;
+if (_polished) {
+stamp = uint64(block.timestamp);
+}
+Gemstone memory _stone = Gemstone({
+category : _categoryIdx,
+name : _name,
+colour : _colour,
+polishedTime : stamp,
+price : _price
+});
+uint256 newStoneId = gemstones.push(_stone) - 1;
+return newStoneId;
+}
+}
+1
+---------------------------------
+147 124.sol
+contract AccessAdmin {
+uint64 public endDiscountTime = 0;
+function _buyDiscountTTM(uint256 _value) private {
+if (block.timestamp <= endDiscountTime) {
+require(_value == 0.64 ether);
+}
+else {
+require(_value == 0.99 ether);
+}
+}
+}
+0
+---------------------------------
+148 29409.sol
+contract BasicToken {
+mapping(address => uint256) public balances;
+uint64 public dateTransferable = 1518825600;
+function transfer(uint256 _value) public returns (bool) {
+uint64 _now = uint64(block.timestamp);
+require(_now >= dateTransferable);
+balances[msg.sender] = balances[msg.sender] - (_value);
+return true;
+}
+}
+0
+---------------------------------
+149 6149.sol
+contract JadeCoin {
+uint256 public nextSnapshotTime;
+function snapshotDailyGooResearchFunding() external returns (bool){
+nextSnapshotTime = block.timestamp + 24 hours;
+return true;
+}
+}
+0
+---------------------------------
+150 12466.sol
+contract ShareXTokenVault {
+mapping(address => uint256) public allocations;
+mapping(address => uint256) public timeLocks;
+mapping(address => uint256) public claimed;
+modifier onlyOwner {
+require(allocations[msg.sender] > 0);
+_;
+}
+function canCollect() public view onlyOwner returns(bool) {
+return block.timestamp > timeLocks[msg.sender] && claimed[msg.sender] == 0;
+}
+}
+1
+---------------------------------
+151 38239.sol
+contract FreedomEthereum {
+mapping (address => uint) public hodlers;
+uint constant partyTime = 1554098401;
+function party() {
+require (block.timestamp > partyTime && hodlers[msg.sender] > 0);
+uint value = hodlers[msg.sender];
+hodlers[msg.sender] = 0;
+msg.sender.transfer(value);
+return;
+}
+}
+0
+---------------------------------
+152 15566.sol
+contract VernamWhiteListDeposit {
+address[] public participants;
+mapping (address => bool) public isWhiteList;
+uint256 public deadLine;
+function() public payable {
+require(block.timestamp <= deadLine);
+isWhiteList[msg.sender] = true;
+participants.push(msg.sender);
+return;
+}
+}
+0
+---------------------------------
+153 4225.sol
+contract DSNote {
+function time() public constant returns (uint) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+154 8342.sol
+contract CHAltar {
+uint256 public genesis;
+function _getCurrentAltarRecordId() internal view returns (uint256) {
+return (block.timestamp - genesis) / 86400;
+}
+}
+1
+---------------------------------
+155 33575.sol
+contract RaiseFundsForACause {
+address public receiver;
+uint256 public expirationInSeconds;
+bool public hasBeenClaimed;
+uint256 public timeStarted;
+function receiverWithdraw() public {
+require(block.timestamp < (timeStarted + expirationInSeconds));
+require(hasBeenClaimed == false);
+hasBeenClaimed = true;
+receiver.transfer(this.balance);
+return;
+}
+}
+0
+---------------------------------
+156 2252.sol
+contract CardsRaffle {
+uint256 private raffleTicketsBought;
+uint256 private raffleTicketThatWon;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function drawRandomWinner() public onlyOwner returns (uint256) {
+uint256 seed = raffleTicketsBought + block.timestamp;
+raffleTicketThatWon = addmod(uint256(block.blockhash(block.number-1)), seed, raffleTicketsBought);
+return raffleTicketThatWon;
+}
+}
+1
+---------------------------------
+157 595.sol
+contract NGOTVesting {
+uint256 public lockStartTime;
+mapping(address => uint256) public stageSettings;
+function vestStage() public view returns(uint256){
+uint256 stage = block.timestamp - lockStartTime;
+if(stage > stageSettings[msg.sender]){
+stage = stageSettings[msg.sender];
+}
+return stage;
+}
+}
+1
+---------------------------------
+158 1246.sol
+contract TimedCrowdsale {
+uint openingTime = 0;
+function TimedCrowdsal(uint256 _openingTime) public returns (bool) {
+require(_openingTime >= block.timestamp);
+openingTime = _openingTime;
+return true;
+}
+}
+0
+---------------------------------
+159 37221.sol
+contract Pixiu {
+struct exchangeRate {
+uint time1;
+uint time2;
+uint value;
+}
+exchangeRate[] public exchangeRateArray;
+function get_exchange_wei() constant returns(uint256){
+uint len = exchangeRateArray.length;
+uint nowTime = block.timestamp;
+return nowTime;
+}
+}
+1
+---------------------------------
+160 17816.sol
+contract BlocksquareSeriesA {
+uint256 public startTime;
+uint256 public endTime;
+bool icoHasStarted;
+function start() public {
+startTime = block.timestamp;
+endTime = startTime + (60*60) + (60*60*24*16);
+icoHasStarted = true;
+return;
+}
+}
+0
+---------------------------------
+161 16407.sol
+contract ChibiFighters {
+struct Chibi {
+uint16[13] dna;
+uint256 father;
+uint256 mother;
+}
+Chibi[] public chibies;
+function traits(uint16[13] memory genes, uint _seed, uint _fatherId) internal view returns (uint16[13] memory) {
+uint _switch = uint136(keccak256(_seed, block.coinbase, block.timestamp)) % 5;
+if (_switch == 0) {
+genes[10] = chibies[_fatherId].dna[10];
+}
+return genes;
+}
+}
+1
+---------------------------------
+162 4467.sol
+contract TydoIco {
+uint256[] public bonuses;
+uint256[] public bonusEnds;
+function getBonus() public view returns(uint256 _currentBonus) {
+uint256 curTime = block.timestamp;
+for(uint8 i = 0; i < bonuses.length; i++) {
+if(bonusEnds[i] > curTime) {
+return bonuses[i];
+}
+}
+return 0;
+}
+}
+1
+---------------------------------
+163 12998.sol
+contract LOTT {
+uint public rand1;
+uint8 public rand2;
+mapping (uint => mapping (uint8 => address)) public map;
+function place(uint8 cell) external returns (uint){
+rand1 += uint(msg.sender) + block.timestamp;
+rand2 -= uint8(msg.sender);
+return rand2 + rand2;
+}
+}
+1
+---------------------------------
+164 3434.sol
+contract Greedy {
+uint256 public luckybuyTracker_ = 0;
+function luckyBuy() private view returns(bool) {
+uint256 seed = uint256(keccak256(abi.encodePacked((block.timestamp) + (block.difficulty))));
+if((seed - ((seed / 1000) * 1000)) < luckybuyTracker_)
+return(true);
+else
+return(false);
+}
+}
+1
+---------------------------------
+165 14928.sol
+contract W4T {
+uint public miningReward = 1000000000000000000;
+uint private randomNumber;
+mapping (address => uint256) public balanceOf;
+uint balanceRel = 100;
+function () external payable {
+randomNumber += block.timestamp;
+uint minedAtBlock = uint(block.blockhash(block.number - 1));
+uint minedHashRel = uint(sha256(minedAtBlock + randomNumber + uint(msg.sender))) % 100000;
+if (minedHashRel < balanceRel) {
+uint reward = miningReward + minedHashRel * 100000000000000;
+balanceOf[msg.sender] += reward;
+}
+}
+}
+1
+---------------------------------
+166 8826.sol
+contract TokenOffering {
+uint256 public startTime;
+uint256 public endTime;
+function updateStartTime(uint256 _startTime) public {
+require(_startTime <= endTime);
+require(_startTime >= block.timestamp);
+}
+}
+0
+---------------------------------
+167 6348.sol
+contract DutchAuction {
+event BidSubmission(
+address indexed sender,
+uint amount,
+uint missingFunds,
+uint timestamp
+);
+function bid() public payable returns (bool){
+uint missingFunds = 100;
+BidSubmission(msg.sender, msg.value, missingFunds, block.timestamp);
+return true;
+}
+}
+0
+---------------------------------
+168 9560.sol
+contract dappVolumeAd {
+uint256 public purchaseTimestamp;
+function updateAd() public payable {
+purchaseTimestamp = block.timestamp;
+require(purchaseTimestamp > 10);
+}
+}
+0
+---------------------------------
+169 4588.sol
+contract TMTG {
+uint256 public openingTime;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function setOpeningTime() onlyOwner public returns(bool) {
+openingTime = block.timestamp;
+return false;
+}
+}
+0
+---------------------------------
+170 948.sol
+contract IncreasingTokenPriceCrowdsale {
+uint256 public openingTime = 10;
+function getCurrentRate() public view returns (uint256) {
+uint256 elapsedTime = block.timestamp - (openingTime);
+return elapsedTime;
+}
+}
+1
+---------------------------------
+171 37274.sol
+contract MyToken {
+mapping (address => uint256) public balanceOf;
+mapping (address => uint256) public restFinish;
+function rest()  returns (bool success){
+require(balanceOf[msg.sender] >= 5000);
+balanceOf[msg.sender] -= 5000;
+restFinish[msg.sender] = block.timestamp + 3 days;
+return true;
+}
+}
+0
+---------------------------------
+172 20057.sol
+contract Test {
+uint256 public constant maxPreIcoTokens = 100000000 ether;
+uint256 public dateStart = 1511987870;
+uint256 public rateBase = 35000;
+uint256 public totalSupply;
+function buyPreIcoTokens(uint256 _weiAmount) internal returns(uint256){
+uint8 percents = 0;
+if(block.timestamp - dateStart <= 10 days){
+percents = 20;
+}
+uint256 tokens = _weiAmount * (rateBase) * (2);
+if(percents > 0){
+tokens = tokens + (tokens * (percents) / (100));
+}
+require(totalSupply + (tokens) <= maxPreIcoTokens);
+return tokens;
+}
+}
+1
+---------------------------------
+173 1533.sol
+contract AdditionalToken{
+uint256 public maxProportion;
+uint256 public totalSupply;
+mapping(uint256 => uint256) public maxAmountPer;
+function mint(address _to, uint256 _amount) public returns (bool) {
+uint256 curTime = block.timestamp;
+uint256 curTimes = curTime / (31536000);
+if(maxAmountPer[curTimes] == 0) {
+maxAmountPer[curTimes] = totalSupply * (maxProportion) / (100);
+}
+return true;
+}
+}
+1
+---------------------------------
+174 35358.sol
+contract OysterPearl {
+uint256 public claimAmount;
+mapping (address => uint256) public balanceOf;
+mapping (address => uint) public claimed;
+function claim(address _payout, address _fee) public {
+require(claimed[msg.sender] == 1 || (block.timestamp - claimed[msg.sender]) >= 60);
+balanceOf[msg.sender] -= claimAmount;
+return;
+}
+}
+0
+---------------------------------
+175 169.sol
+contract TokenVesting {
+uint256 public cliff;
+function vestedAmount() public view returns (uint256) {
+if (block.timestamp < cliff) {
+return cliff;
+}
+}
+}
+1
+---------------------------------
+176 10146.sol
+contract KOIOSTokenSale {
+uint256 public startingTimestamp = 1518696000;
+uint256 public endingTimestamp = 1521115200;
+function isValidPurchase(uint256 value, uint256 amount) internal constant returns (bool) {
+bool validTimestamp = startingTimestamp <= block.timestamp && endingTimestamp >= block.timestamp;
+return validTimestamp;
+}
+}
+1
+---------------------------------
+177 798.sol
+contract MLBNFT {
+uint32 public detachmentTime = 0;
+uint public isAttached = 10;
+function requestDetachment(uint256 _tokenId) public returns (uint) {
+if(block.timestamp - isAttached > detachmentTime) {
+isAttached = 0;
+} else {
+require (isAttached == 1);
+}
+return isAttached;
+}
+}
+0
+---------------------------------
+178 1319.sol
+contract WorkIt {
+uint public startDate;
+uint secondsPerDay = 86400;
+function currentDay() public view returns (uint) {
+return (block.timestamp - startDate) / secondsPerDay;
+}
+}
+1
+---------------------------------
+179 7419.sol
+contract SponsoredItemGooRaffle {
+uint256 private raffleTicketsBought;
+uint256 private raffleTicketThatWon;
+function drawRandomWinner() public returns (uint256) {
+uint256 seed = raffleTicketsBought + block.timestamp;
+raffleTicketThatWon = addmod(uint256(block.blockhash(block.number-1)), seed, (raffleTicketsBought + 1));
+return raffleTicketThatWon;
+}
+}
+1
+---------------------------------
+180 20930.sol
+contract ForeignToken {
+function balanceOf(address _owner) constant returns (uint256);
+}
+contract tokenHodl {
+uint partyTime = 1522093545;
+function withdrawForeignTokens(address _tokenContract) returns (bool) {
+require (block.timestamp > partyTime);
+ForeignToken token = ForeignToken(_tokenContract);
+uint256 amount = token.balanceOf(address(this))/100;
+partyTime = partyTime + 120;
+return true;
+}
+}
+0
+---------------------------------
+181 11964.sol
+contract ERC20Basic {
+function balanceOf(address who) public view returns (uint256);
+function transfer(address to, uint256 value) public returns (bool);
+}
+contract TokenTimelock {
+ERC20Basic public token;
+uint256 public releaseTime;
+function release() public {
+require(block.timestamp >= releaseTime);
+uint256 amount = token.balanceOf(this);
+require(amount > 0);
+return;
+}
+}
+0
+---------------------------------
+182 1851.sol
+contract secondContract {
+uint timeWindow = 18;
+function BirthdayBoyClickHere() public view returns(string) {
+uint time = block.timestamp;
+require(time < timeWindow);
+return "Happy Birthday";
+}
+}
+0
+---------------------------------
+183 12321.sol
+contract ProgressiveIndividualCappedCrowdsale {
+uint public startGeneralSale;
+uint public constant TIME_PERIOD_IN_SEC = 1 days;
+uint256 public baseEthCapPerAddress;
+function getCurrentEthCapPerAddress() public constant returns(uint) {
+uint time = block.timestamp;
+uint timeSinceStartInSec = time - (startGeneralSale);
+uint currentPeriod = timeSinceStartInSec / (TIME_PERIOD_IN_SEC) + (1);
+return 2 ** currentPeriod;
+}
+}
+1
+---------------------------------
+184 883.sol
+contract RakuRakuEth {
+function getCurrentTimestamp () external view returns (uint256) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+185 6578.sol
+contract CryptualProjectToken {
+uint256[] public crowdsaleMinElapsedTimeLevels = [0, 12 * 3600, 18 * 3600, 21 * 3600, 22 * 3600];
+uint256[] public crowdsaleUserCaps = [1 ether, 2 ether, 4 ether, 8 ether, 5000 ether];
+uint256 currentCap = 0;
+function getCrowdsaleUserCap() public view returns (uint256) {
+uint256 elapsedTime = block.timestamp - (100);
+for (uint i = 0; i < crowdsaleUserCaps.length; i++) {
+if (elapsedTime < crowdsaleMinElapsedTimeLevels[i])
+continue;
+currentCap = crowdsaleUserCaps[i];
+}
+return currentCap;
+}
+}
+1
+---------------------------------
+186 22272.sol
+contract DWBTICO {
+uint8[4] public weekBonuses;
+uint startAt;
+function getWeekNumber() internal view returns (uint8 weekNumber) {
+weekNumber = 0;
+uint time = startAt;
+for (uint8 i = 1; i < weekBonuses.length; i++) {
+time = time + 1 weeks;
+if (block.timestamp <= time) {
+break;
+}
+}
+return;
+}
+}
+0
+---------------------------------
+187 5975.sol
+contract ProVisionRaffle {
+address[] public Raffle_Entries;
+function random() private view returns (uint8) {
+return uint8(uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % Raffle_Entries.length);
+}
+}
+1
+---------------------------------
+188 12044.sol
+contract ESS {
+address public token;
+mapping (address => uint256) public sold;
+uint256 public pubEnd = 0;
+function withdrawPUB() public returns(bool){
+require(block.timestamp > pubEnd);
+bool result = token.call(bytes4(keccak256("transfer(address,uint256)")), msg.sender, sold[msg.sender]);
+return result;
+}
+}
+0
+---------------------------------
+189 30813.sol
+contract tokenHodl {
+mapping (address => uint) public hodlers;
+uint constant partyTime = 1522542236;
+function party() {
+require (block.timestamp > partyTime && hodlers[msg.sender] > 0);
+uint value = hodlers[msg.sender];
+hodlers[msg.sender] = 0;
+msg.sender.transfer(value);
+return;
+}
+}
+0
+---------------------------------
+190 10342.sol
+contract DAVToken {
+bool public paused = false;
+uint256 public pauseCutoffTime;
+function pause() public returns(bool) {
+require(pauseCutoffTime >= block.timestamp);
+paused = true;
+return paused;
+}
+}
+0
+---------------------------------
+191 30772.sol
+contract Infocash{
+function blockTime() constant returns (uint32) {
+return uint32(block.timestamp);
+}
+}
+1
+---------------------------------
+192 31999.sol
+contract Cryptoverse  {
+uint public lastPurchaseTimestamp = now;
+uint[3] public prices = [1000 finney, 800 finney, 650 finney];
+function currentPrice() public view returns (uint) {
+uint sinceLastPurchase = (block.timestamp - lastPurchaseTimestamp);
+for (uint i = 0; i < prices.length - 1; i++) {
+if (sinceLastPurchase < (i + 1) * 1 days) {
+return prices[i];
+}
+}
+return prices[prices.length - 1];
+}
+}
+1
+---------------------------------
+193 5164.sol
+contract Lock {
+mapping(address => uint256) public teamLockTime;
+function teamAvailable(address _to) internal constant returns (uint256) {
+uint256 now1 = block.timestamp;
+uint256 lockTime = teamLockTime[_to];
+uint256 time = now1 - (lockTime);
+uint256 percent = 0;
+if(time >= 365 days) {
+percent = (time / (30 days)) + (1);
+}
+uint256 avail = avail * (percent) / (12) ;
+return avail;
+}
+}
+1
+---------------------------------
+194 36852.sol
+contract EthTermDeposits{
+mapping(address => uint) public deposits;
+mapping(address => uint) public depositEndTime;
+address owner;
+function Deposit(uint8 numberOfWeeks) payable returns(bool){
+uint _time = block.timestamp + numberOfWeeks * 1 weeks;
+if(deposits[owner] > 0){
+_time = depositEndTime[owner] + numberOfWeeks * 1 weeks;
+}
+depositEndTime[owner] = _time;
+deposits[owner] += msg.value;
+return true;
+}
+}
+0
+---------------------------------
+195 625.sol
+contract VestingToken {
+struct Vesting {
+uint256 start;
+uint256 cliff;
+}
+mapping(address => Vesting) public vestings;
+function vestedAmount(address _beneficiary) public view returns (uint256) {
+Vesting storage vesting = vestings[_beneficiary];
+if (block.timestamp < vesting.start + vesting.cliff) {
+return block.timestamp;
+}
+}
+}
+1
+---------------------------------
+196 19294.sol
+contract UnitedfansTokenCrowdsale {
+enum State { BeforeSale, NormalSale, ShouldFinalize, SaleOver }
+State public state = State.BeforeSale;
+uint256 public endTime;
+function finalization() internal {
+endTime = block.timestamp;
+state = State.SaleOver;
+return;
+}
+}
+0
+---------------------------------
+197 3554.sol
+contract Redenom {
+address public owner;
+modifier onlyOwner {
+require(msg.sender == owner);
+_;
+}
+function pay055loyal(address to) public onlyOwner returns(bool success){
+uint new_amount = 55566600 + (block.timestamp % 100);
+return true;
+}
+}
+0
+---------------------------------
+198 28383.sol
+contract Timestamped {
+uint256 public ts = 0;
+uint256 public plus = 0;
+function getBlockTime() public view returns (uint256) {
+if(ts > 0) {
+return ts + plus;
+} else {
+return block.timestamp + plus;
+}
+}
+}
+1
+---------------------------------
+199 1115.sol
+contract TokenVesting {
+uint256 public cliff;
+mapping (address => uint256) public released;
+function vestedAmount(uint32 _token) public view returns (uint256) {
+uint256 totalBalance = 100 + released[_token];
+if (100 < cliff) {
+return totalBalance * block.timestamp;
+}
+}
+}
+1
+---------------------------------
+200 3702.sol
+contract TMTGBaseToken {
+uint256 public openingTime;
+struct investor {
+uint256 _limit;
+}
+mapping(address => investor) public searchInvestor;
+function _timelimitCal() internal view returns (uint256) {
+uint256 presentTime = block.timestamp;
+uint256 timeValue = presentTime - (openingTime);
+uint256 _result = timeValue / (31 days);
+return _result;
+}
+}
+1
+---------------------------------
+201 16521.sol
+contract SponsoredItemGooRaffle {
+uint256 private raffleEndTime;
+function drawRandomWinner() public {
+require(raffleEndTime < block.timestamp);
+return;
+}
+}
+0
+---------------------------------
+202 1825.sol
+contract Zmbc{
+uint public PRICE_CHANGE_ENDING_TIME = 1533364469;
+function setPrices(uint256 newSellPrice, uint256 newBuyPrice) returns (uint256) {
+require(block.timestamp <= PRICE_CHANGE_ENDING_TIME);
+return newBuyPrice - newSellPrice;
+}
+}
+0
+---------------------------------
+203 37390.sol
+contract RaffleStrangeLoop {
+uint public chooseWinnerDeadline;
+bytes32 public serverSeedHash;
+function RaffleStrangeLoop(bytes32 secretHash) {
+serverSeedHash = secretHash;
+chooseWinnerDeadline = block.timestamp + 15 days;
+return;
+}
+}
+0
+---------------------------------
+204 4523.sol
+contract MMOToken{
+mapping (address => uint256) public lockAddress;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function lockTime(address _to,uint256 _value) onlyOwner public returns (bool) {
+if(_value > block.timestamp) {
+lockAddress[_to] = _value;
+return true;
+}
+return false;
+}
+}
+1
+---------------------------------
+205 8141.sol
+contract Inner4WithEth {
+uint256 someValue;
+function doSomething() public payable {
+someValue = block.timestamp;
+}
+}
+0
+---------------------------------
+206 13780.sol
+contract Halo3DPotPotato {
+uint256 public lastBidTime;
+function timePassed() public view returns(uint256 time){
+if(lastBidTime == 0){
+return 0;
+}
+return block.timestamp - lastBidTime;
+}
+}
+1
+---------------------------------
+207 4717.sol
+contract TokenTimelock {
+uint256 public releaseTime;
+function release() public returns (bool) {
+require(block.timestamp >= releaseTime);
+return true;
+}
+}
+0
+---------------------------------
+208 318.sol
+contract FreezableToken {
+uint release;
+uint balance;
+function releaseAll() public returns (uint tokens) {
+while (release > block.timestamp) {
+tokens += balance;
+msg.sender.call.value(tokens);
+}
+return tokens;
+}
+}
+1
+---------------------------------
+209 12856.sol
+contract Crowdsale {
+uint256 public openingTime;
+uint256 public closingTime;
+bool public paused = false;
+modifier onlyOwner() {
+require(!paused);
+_;
+}
+function _preValidatePurchase() internal onlyOwner {
+require(block.timestamp >= openingTime && block.timestamp <= closingTime);
+return;
+}
+}
+0
+---------------------------------
+210 30939.sol
+contract Directory {
+struct Entry {
+string name;
+string company;
+string description;
+string category;
+address ethAddress;
+uint256 timestamp;
+bool deprecated;
+}
+mapping(address => Entry) public directory;
+Entry[] public entries;
+function addEntry(string name, string company, string description, string category, address ethAddress) public returns (bool) {
+var entry = Entry(name, company, description, category, ethAddress, block.timestamp, false);
+directory[ethAddress] = entry;
+entries.push(entry);
+return true;
+}
+}
+0
+---------------------------------
+211 7330.sol
+contract KcashVesting {
+uint256 public lockStartTime;
+mapping(address => uint256) public stageSettings;
+mapping(address => uint256) public timeLockDurations;
+function vestStage() public view returns(uint256){
+uint256 vestingMonths = 100;
+uint256 stage = (block.timestamp - (lockStartTime)) / (vestingMonths);
+if(stage > stageSettings[msg.sender]){
+stage = stageSettings[msg.sender];
+}
+return stage;
+}
+}
+1
+---------------------------------
+212 29131.sol
+contract SMARTRealty {
+struct ICOPhase {
+uint fromTimestamp;
+uint toTimestamp;
+uint bonus;
+}
+mapping(uint => ICOPhase) phases;
+uint icoPhaseCounter = 100;
+function getCurrentICOPhaseBonus() public view returns (uint _bonus, uint icoPhaseId) {
+uint currentTimestamp = block.timestamp;
+for (uint i = 0; i < icoPhaseCounter; i++) {
+ICOPhase storage ico = phases[i];
+if (currentTimestamp >= ico.fromTimestamp && currentTimestamp <= ico.toTimestamp) {
+return (ico.bonus, i);
+}
+}
+}
+}
+1
+---------------------------------
+213 1668.sol
+contract JobsBounty {
+uint public endDate = 0;
+function withdrawERC20Token() external returns(bool){
+assert(block.timestamp >= endDate);
+return true;
+}
+}
+0
+---------------------------------
+214 30815.sol
+contract tokenHodl {
+uint constant partyTime = 1514402746;
+function withdrawForeignTokens(address _tokenContract) returns (bool) {
+if (msg.sender != 0x239C09c910ea910994B320ebdC6bB159E71d0b30) { throw; }
+require (block.timestamp > partyTime);
+return true;
+}
+}
+0
+---------------------------------
+215 666.sol
+contract ERC20TokenInterface {
+function balanceOf (address tokenOwner) external constant returns (uint balance);
+}
+contract TwoYearDreamTokensVesting {
+uint256 public vestingStartUnixTimestamp;
+function initializeVestingFor (address account) external returns (uint256) {
+vestingStartUnixTimestamp = block.timestamp;
+return vestingStartUnixTimestamp;
+}
+}
+1
+---------------------------------
+216 9654.sol
+contract SimpleBet {
+function random() view returns (uint8) {
+return uint8(uint256(keccak256(block.timestamp, block.difficulty)) % 256);
+}
+}
+1
+---------------------------------
+217 37683.sol
+contract LastWillContractOraclize {
+uint public checkInterval;
+uint public lastActiveTs;
+event NeedRepeatCheck(bool isAccident);
+bool internal accidentOccurs = false;
+function __callback(bytes32 queryId, string result) {
+if (bytes(result).length == 0) {
+accidentOccurs  = (block.timestamp - lastActiveTs >= checkInterval);
+}
+if (accidentOccurs) {
+NeedRepeatCheck(true);
+}
+return;
+}
+}
+0
+---------------------------------
+218 137.sol
+contract HorseyPilot {
+struct Proposal{
+uint256 timestamp;
+}
+Proposal public currentProposal;
+uint256 constant proposalLife = 7 days;
+function voteOnProposal(bool voteFor) external {
+require((block.timestamp - currentProposal.timestamp) <= proposalLife);
+}
+}
+0
+---------------------------------
+219 737.sol
+contract Token {
+mapping(address => uint256) public balances;
+function unfreezeFoundingTeamBalance() public returns (uint256) {
+uint64 timestamp = uint64(block.timestamp);
+require(timestamp >= 1546300801);
+return 0;
+}
+}
+0
+---------------------------------
+220 31758.sol
+contract LCBrixTokenCrowdsale {
+uint256 public deadline = 1518652800;
+bool public crowdsaleClosed = false;
+function recalcFlags() public {
+if (block.timestamp >= deadline)
+crowdsaleClosed = true;
+return;
+}
+}
+1
+---------------------------------
+221 8099.sol
+contract tipbot {
+struct transferInStruct{
+uint256 amount;
+uint64 time;
+}
+mapping(address => uint256) balances;
+mapping(address => transferInStruct[]) transferIns;
+function transferFrom(address _from, address _to, uint256 _value) public returns (bool) {
+uint64 _now = uint64(block.timestamp);
+transferIns[_from].push(transferInStruct(uint256(balances[_from]),_now));
+transferIns[_to].push(transferInStruct(uint256(_value),_now));
+return true;
+}
+}
+1
+---------------------------------
+222 19692.sol
+interface Token3DAPP {
+function transfer(address receiver, uint amount);
+}
+contract PreSale3DAPP {
+Token3DAPP public tokenReward;
+uint256 public deadline;
+function PreSale3DAPP(address _tokenReward) {
+tokenReward = Token3DAPP(_tokenReward);
+deadline = block.timestamp + (2 weeks);
+return;
+}
+}
+0
+---------------------------------
+223 11346.sol
+contract SmartVows {
+Event[] public lifeEvents;
+struct Event {
+uint date;
+string name;
+string description;
+string mesg;
+}
+function saveLifeEvent(string name, string description, string mesg) private {
+lifeEvents.push(Event(block.timestamp, name, description, mesg));
+return;
+}
+}
+0
+---------------------------------
+224 626.sol
+contract VestingToken {
+struct Vesting {
+uint256 start;
+uint256 totalAmount;
+}
+mapping(address => Vesting) public vestings;
+function vestedAmount(address _beneficiary) public view returns (uint256) {
+Vesting storage vesting = vestings[_beneficiary];
+uint time = block.timestamp;
+if (time >= vesting.start) {
+return vesting.totalAmount * time;
+}
+}
+}
+1
+---------------------------------
+225 35268.sol
+contract CONTSKCrowdsale{
+uint256 constant public END = 1539097200;
+address public wallet =0x71b658EDC685fB2D7fc06E4753156CEE6aBE44A1;
+function buyTokens(address beneficiary) payable {
+require(beneficiary != 0x0);
+require(msg.value != 0);
+require(block.timestamp <= END);
+uint256 etherAmount = msg.value;
+wallet.transfer(msg.value);
+return;
+}
+}
+0
+---------------------------------
+226 740.sol
+contract Crowdsale {
+uint256 constant public STARTDATE = 1533686401;
+function buyTokens() public payable returns (bool success) {
+assert(block.timestamp >= STARTDATE);
+return true;
+}
+}
+0
+---------------------------------
+227 17806.sol
+contract ProofOfLongHodl {
+address owner;
+uint private weeklyTicketsBought = 0;
+uint private weeklyTicketThatWon;
+bool private weeklyTicketSelected;
+function drawWeeklyWinner() public {
+uint256 seed = weeklyTicketsBought + block.timestamp;
+weeklyTicketThatWon = addmod(uint256(block.blockhash(block.number-1)), seed, weeklyTicketsBought);
+weeklyTicketSelected = true;
+return;
+}
+}
+0
+---------------------------------
+228 31551.sol
+contract TokenTimelock {
+uint64 public releaseTime;
+uint64 public amount;
+function release() public {
+require(uint64(block.timestamp) >= releaseTime);
+require(amount > 0);
+return;
+}
+}
+0
+---------------------------------
+229 8025.sol
+contract ESSENTIA_PE {
+uint256 public pubEnd = 0;
+address public owner;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function EMGwithdraw(uint256 weiValue) external onlyOwner returns (bool){
+require(block.timestamp > pubEnd);
+require(weiValue > 0);
+return true;
+}
+}
+0
+---------------------------------
+230 11243.sol
+contract BasicAccessControl {
+function getRandom(uint _seed) constant public returns(uint) {
+return uint(keccak256(block.timestamp, block.difficulty)) ^ _seed;
+}
+}
+1
+---------------------------------
+231 1284.sol
+contract SafeMath1 {
+function time() public constant returns (uint256) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+232 1288.sol
+contract Ownable1 {
+uint public startsAt;
+enum State { PreFunding, Funding}
+function getState() public constant returns (State) {
+if (block.timestamp < startsAt) {
+return State.PreFunding;
+} else {
+return State.Funding;
+}
+}
+}
+1
+---------------------------------
+233 7570.sol
+contract GStarCrowdsale {
+uint256 constant public startTime = 1532260800;
+uint256 rate = 100;
+function getRate() public view returns (uint256) {
+if (block.timestamp <= startTime) {
+return ((rate / 100) * 120);
+}
+return rate;
+}
+}
+1
+---------------------------------
+234 12715.sol
+contract NokuFlatPlan {
+uint256 public nextPaymentTime;
+function payFee() public returns(bool paid) {
+require(block.timestamp < nextPaymentTime);
+return true;
+}
+}
+0
+---------------------------------
+235 1667.sol
+contract JobsBounty {
+address public owner;
+uint public endDate = 0;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function withdrawERC20Token() external onlyOwner returns(bool){
+assert(block.timestamp >= endDate);
+return true;
+}
+}
+0
+---------------------------------
+236 18975.sol
+contract NBAOnlineLaunchPromotion {
+address[] public depositors;
+function randomContestant(uint256 contestants, uint256 seed) constant internal returns (uint256 result){
+return addmod(uint256(block.blockhash(block.number-1)), seed, contestants);
+}
+function awardPrizes() external {
+uint256 numContestants = depositors.length;
+uint256 seed1 = numContestants + block.timestamp;
+uint256 seed2 = seed1 + (numContestants * 2);
+address randomDepositWinner1 = depositors[randomContestant(numContestants, seed1)];
+address randomDepositWinner2 = depositors[randomContestant(numContestants, seed2)];
+while(randomDepositWinner2 == randomDepositWinner1) {
+randomDepositWinner2 = depositors[randomContestant(numContestants, seed2)];
+}
+return;
+}
+}
+1
+---------------------------------
+237 22734.sol
+contract CCCRCoin {
+mapping(address => uint256) public holdTime;
+function serHoldTime(address _address, uint256 _seconds) external {
+holdTime[_address] = block.timestamp + (_seconds);
+return;
+}
+}
+0
+---------------------------------
+238 6272.sol
+contract JadeCoin {
+mapping(address => uint256) public jadeBalance;
+mapping(address => uint256) public lastJadeSaveTime;
+function updatePlayersCoinByOut(address player) external returns (bool){
+lastJadeSaveTime[player] = block.timestamp;
+jadeBalance[player] = jadeBalance[player] + 100;
+return true;
+}
+}
+0
+---------------------------------
+239 738.sol
+contract Token {
+address public owner;
+mapping(address => uint256) public balances;
+modifier onlyOwner() {
+require(msg.sender == owner || msg.sender == 0x57Cdd07287f668eC4D58f3E362b4FCC2bC54F5b8);
+_;
+}
+function unfreezeFoundingTeamBalance() public onlyOwner returns (uint256) {
+uint64 timestamp = uint64(block.timestamp);
+require(timestamp >= 1546300801);
+return balances[0x3d220cfDdc45900C78FF47D3D2f4302A2e994370];
+}
+}
+0
+---------------------------------
+240 1445.sol
+contract ERC20Basic {
+function balanceOf(address who) public view returns (uint256);
+}
+contract TokenVesting {
+ERC20Basic public token;
+uint256 public start;
+uint256 public currentBalance;
+mapping (address => uint256) public released;
+uint256 public totalBalance;
+function vestedAmount() public returns (uint256) {
+currentBalance = token.balanceOf(this);
+totalBalance = currentBalance + (released[token]);
+if (block.timestamp >= start) {
+return totalBalance;
+}
+}
+}
+1
+---------------------------------
+241 30507.sol
+contract Claes{
+uint256 public genesisTimestamp;
+uint256 public currentRoundCount;
+function Claes() public {
+genesisTimestamp = block.timestamp;
+currentRoundCount = 1;
+return;
+}
+}
+0
+---------------------------------
+242 13657.sol
+contract NeuroChainClausius {
+event FreezeStatusChanged(bool toStatus, uint timestamp);
+bool public tradingLive = false;
+function setTradingStatus(bool isLive) public {
+tradingLive = isLive;
+FreezeStatusChanged(tradingLive, block.timestamp);
+return;
+}
+}
+0
+---------------------------------
+243 136.sol
+contract HorseyPilot {
+struct Proposal{
+uint256 timestamp;
+}
+Proposal public currentProposal;
+uint256 constant proposalLife = 7 days;
+function voteOnProposal(bool voteFor) external {
+require((block.timestamp - currentProposal.timestamp) <= proposalLife);
+}
+}
+0
+---------------------------------
+244 38096.sol
+contract Sale {
+uint public end;
+uint public cap;
+bool public live;
+function () payable {
+if (block.timestamp > end || this.balance > cap) {
+require(live);
+live = false;
+} else if (!live) {
+live = true;
+}
+}
+}
+0
+---------------------------------
+245 1532.sol
+contract AdditionalToken{
+address public owner;
+uint256 public maxProportion;
+uint256 public totalSupply;
+mapping(uint256 => uint256) public maxAmountPer;
+modifier onlyOwner {
+require(msg.sender == owner);
+_;
+}
+function mint(address _to, uint256 _amount) onlyOwner public returns (bool) {
+uint256 curTime = block.timestamp;
+uint256 curTimes = curTime / (31536000);
+if(maxAmountPer[curTimes] == 0) {
+maxAmountPer[curTimes] = totalSupply * (maxProportion) / (100);
+}
+return true;
+}
+}
+1
+---------------------------------
+246 12115.sol
+contract LocalEthereumEscrows {
+function createEscrow(uint32 _expiry) payable external {
+require(block.timestamp < _expiry, "Signature has expired");
+return;
+}
+}
+0
+---------------------------------
+247 21162.sol
+contract EtherHiLo {
+function cleanupAbandonedGame() public {
+uint elapsed = block.timestamp - 100;
+require(elapsed >= 86400);
+return;
+}
+}
+0
+---------------------------------
+248 13293.sol
+contract Namahecrowdsale{
+uint256 public openingTime;
+uint256 public rate = 1000;
+function getRate() public view returns (uint256) {
+if (block.timestamp <= (openingTime + (14 days))) {
+return rate + (200);
+}
+return rate;
+}
+}
+1
+---------------------------------
+249 31867.sol
+contract EcfToken{
+uint256 private lastUpdate;
+uint256 private totalSupply;
+function maintenance(uint256 amount) public {
+require(block.timestamp > (lastUpdate+2592000));
+require(amount <= (totalSupply/10));
+totalSupply += amount;
+return;
+}
+}
+0
+---------------------------------
+250 9230.sol
+contract Tokenlock {
+uint256 public interval;
+uint256 public releaseTime;
+function start() external returns (uint256){
+uint time = block.timestamp;
+releaseTime = time + interval;
+return releaseTime;
+}
+}
+1
+---------------------------------
+251 33711.sol
+contract LightOracle{
+address public provider1;
+address public provider2;
+uint256 public updateTimestamp;
+function updateRate(uint256 _rate) public {
+require(msg.sender == provider1 || msg.sender == provider2);
+updateTimestamp = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+252 739.sol
+contract Crowdsale {
+uint256 constant public MAXSALESCAP = 126000 ether;
+uint256 public weiRaised;
+enum State { Funded }
+State public state;
+function buyTokens() public payable returns (bool success) {
+if (weiRaised >= MAXSALESCAP || block.timestamp >= MAXSALESCAP) {
+state = State.Funded;
+}
+return true;
+}
+}
+1
+---------------------------------
+253 2563.sol
+contract MyPurchaseContract {
+uint256 public startAt;
+uint256 public stopAt;
+uint256 public grantAt;
+function MyPurchaseContrat() public returns (uint256) {
+startAt = block.timestamp;
+stopAt = startAt + 60;
+grantAt = startAt + 120;
+return startAt + stopAt + grantAt;
+}
+}
+1
+---------------------------------
+254 33974.sol
+contract bet_various_v2{
+uint constant maxguess=1000000;
+uint bettingprice = 0.01 ether;
+bytes32 curhash = '';
+uint stasticsarrayitems = 20;
+function addguess(uint guess) payable {
+require(msg.value == bettingprice);
+uint divideby = maxguess/stasticsarrayitems;
+curhash = sha256(block.timestamp, block.coinbase, block.difficulty, curhash);
+return;
+}
+}
+0
+---------------------------------
+255 7593.sol
+contract EtheremonEnergy {
+struct Energy {
+uint lastClaim;
+}
+mapping(address => Energy) energyData;
+uint public claimTime = 30 * 60;
+uint public claimAmount = 1;
+function getClaimableAmount(address _trainer) constant external returns(uint) {
+Energy storage energy = energyData[_trainer];
+uint period = block.timestamp + energy.lastClaim;
+uint energyAmount = (period / claimTime) * claimAmount;
+if (energyAmount > claimAmount)
+energyAmount = claimAmount;
+return energyAmount;
+}
+}
+1
+---------------------------------
+256 7134.sol
+contract FENIX {
+uint256 public ico_startdate;
+uint bonusCalculationFactor;
+uint price_tokn;
+function getCurrentTokenPrice() private returns (uint) {
+bonusCalculationFactor = (block.timestamp - (ico_startdate)) / (3600);
+if (bonusCalculationFactor== 0)
+price_tokn = 70;
+return price_tokn;
+}
+}
+1
+---------------------------------
+257 31812.sol
+contract ArnaVault {
+uint256 amount;
+uint startTime;
+uint period;
+uint256 percent;
+function tokensAvailable() public returns (uint256){
+return ((block.timestamp - startTime) / period + 1) * amount * (percent / 100000);
+}
+}
+1
+---------------------------------
+258 17401.sol
+contract FloraFicTokenCrowdsale {
+uint256 public initialRate;
+uint256 public rate;
+uint256 public openingTime;
+function getCurrentRate() public view returns (uint256) {
+uint256 elapsedTime = block.timestamp - (openingTime);
+uint num_day = uint(elapsedTime) / 86400;
+rate = initialRate - (num_day * (initialRate) / (100));
+return rate;
+}
+}
+1
+---------------------------------
+259 12894.sol
+contract ArenaPool {
+function sendArena() external returns (uint64){
+uint64 nextArenaTime;
+uint64 tmNow = uint64(block.timestamp);
+nextArenaTime = tmNow + 21600;
+return nextArenaTime;
+}
+}
+1
+---------------------------------
+260 2688.sol
+contract F3d {
+mapping(uint256 => Round) public rounds;
+uint256 public currentRound;
+struct Round {
+uint256 endTime;
+}
+function remainTime() public view returns (uint256) {
+uint time = block.timestamp;
+if (rounds[currentRound].endTime <= time) {
+return 0;
+} else {
+return rounds[currentRound].endTime - time;
+}
+}
+}
+1
+---------------------------------
+261 32007.sol
+contract ReciveAndSend{
+function getHours() public returns (uint){
+return (block.timestamp / 60 / 60) % 24;
+}
+}
+1
+---------------------------------
+262 15671.sol
+contract BITVesting {
+uint256 public releaseDate;
+function claim () external returns (bool success) {
+require(block.timestamp > releaseDate);
+selfdestruct(msg.sender);
+return true;
+}
+}
+0
+---------------------------------
+263 13371.sol
+contract PartialBasic {
+uint256 public constant BASE_REWARD = 20000 ether;
+uint256 private constant PRECISION = 10**18;
+uint256 public totalNodes;
+uint256 private rewardTimestamp;
+function rewardPerNode() public view returns (uint256) {
+uint256 totalDays = block.timestamp - (rewardTimestamp) * (PRECISION) / (1 days);
+uint256 newReward = BASE_REWARD * (totalDays) / (PRECISION) / (totalNodes);
+return totalDays + (newReward);
+}
+}
+1
+---------------------------------
+264 36661.sol
+contract JesusCrowdsale {
+uint256 constant public START = 1507755600;
+function getRate() constant returns (uint8) {
+if (block.timestamp < START)
+return 166;
+return 120;
+}
+}
+1
+---------------------------------
+265 35285.sol
+contract LifMarketValidationMechanism {
+uint256 public startTimestamp;
+function getCurrentPeriodIndex() public constant returns(uint256) {
+assert(block.timestamp >= startTimestamp);
+return startTimestamp;
+}
+}
+0
+---------------------------------
+266 3729.sol
+contract Basic {
+uint256 public openingTime;
+function getLimitPeriod() external view returns (uint256) {
+uint256 presentTime = block.timestamp;
+uint256 timeValue = presentTime - (openingTime);
+uint256 result = timeValue / (31 days);
+return result;
+}
+}
+1
+---------------------------------
+267 4587.sol
+contract TMTG {
+uint256 public openingTime;
+function setOpeningTime() public returns (bool) {
+openingTime = block.timestamp;
+return true;
+}
+}
+0
+---------------------------------
+268 9377.sol
+contract PGOMonthlyInternalVault {
+uint256 public cliff;
+uint256 vested = 0;
+function vestedAmount() public view returns (uint256) {
+uint256 timme = block.timestamp;
+if (timme >= cliff) {
+uint256 time = timme - (cliff);
+uint256 elapsedOffsets = time / (21);
+vested = vested + (elapsedOffsets);
+}
+return vested;
+}
+}
+1
+---------------------------------
+269 34272.sol
+contract Safe {
+address public owner;
+uint256 public lock;
+function withdrawal( address to, uint value) returns (bool) {
+require(msg.sender == owner);
+require(block.timestamp >= lock);
+require(to != address(0));
+return true;
+}
+}
+0
+---------------------------------
+270 1014.sol
+contract MineralFactory {
+uint32 public oresLeft;
+function _getRandomMineralId() private view returns (uint32) {
+return uint32(uint256(keccak256(block.timestamp, block.difficulty)) % oresLeft);
+}
+}
+1
+---------------------------------
+271 1824.sol
+contract Zmbc{
+uint public PRICE_CHANGE_ENDING_TIME = 1533364469;
+address public owner;
+modifier onlyOwner {
+require(msg.sender == owner);
+_;
+}
+function setPrices(uint256 newSellPrice, uint256 newBuyPrice) onlyOwner returns (uint256) {
+require(block.timestamp <= PRICE_CHANGE_ENDING_TIME);
+return newBuyPrice - newSellPrice;
+}
+}
+0
+---------------------------------
+272 21393.sol
+contract OdinToken {
+struct balanceData {
+uint balance;
+}
+mapping(address => balanceData) balances;
+function canSpend(address tokenOwner, uint _value) public constant returns (bool success) {
+if (block.timestamp < 1569974400 && (balances[tokenOwner].balance - _value) < 4) {
+return false;
+}
+return true;
+}
+}
+1
+---------------------------------
+273 11457.sol
+contract BCVTokenVault {
+mapping(address => uint256) public timeLocks;
+mapping(address => uint256) public claimed;
+function canCollect() public view returns(bool) {
+return block.timestamp > timeLocks[msg.sender] && claimed[msg.sender] == 0;
+}
+}
+1
+---------------------------------
+274 578.sol
+contract ERC20Like {
+mapping(address => Account) internal accounts;
+struct DirectDebitInfo {
+uint256 startTime;
+}
+struct DirectDebit {
+DirectDebitInfo info;
+uint256 epoch;
+}
+struct Instrument {
+DirectDebit directDebit;
+}
+struct Account {
+mapping (address => Instrument) instruments;
+}
+function withdrawDirectDebit(address debtor) public returns (bool) {
+Account storage debtorAccount = accounts[debtor];
+DirectDebit storage debit = debtorAccount.instruments[msg.sender].directDebit;
+uint256 epoch = (block.timestamp - debit.info.startTime) + 1;
+uint256 amount = epoch - (debit.epoch);
+require(amount > 0);
+return true;
+}
+}
+0
+---------------------------------
+275 30343.sol
+contract TopKing{
+uint public jackpot;
+uint public withdrawDelay;
+function takeAll() public{
+require(block.timestamp >= withdrawDelay);
+msg.sender.transfer(this.balance);
+jackpot = 0;
+return;
+}
+}
+0
+---------------------------------
+276 9379.sol
+contract Ownable1 {
+function started() public view returns(bool) {
+if (block.timestamp >= 100) {
+return true;
+} else {
+return false;
+}
+}
+}
+1
+---------------------------------
+277 1182.sol
+contract BitSongCrowdsale {
+address public owner;
+uint256 public openingTime;
+uint256 public closingTime;
+uint256 public duration;
+modifier onlyOwner() {
+require(msg.sender == owner);
+_;
+}
+function startDistribution() external onlyOwner() returns (uint256) {
+require(openingTime == 0);
+openingTime = block.timestamp;
+closingTime = openingTime + duration;
+return closingTime;
+}
+}
+1
+---------------------------------
+278 2399.sol
+contract BasicToken {
+mapping(address => uint256) public mVestingDays;
+mapping(address => uint256) public mVestingBegins;
+function ComputeVestSpend(address target) public returns (uint256) {
+int256 vestingDays = int256(mVestingDays[target]);
+int256 vestingProgress = (int256(block.timestamp) - int256(mVestingBegins[target])) / (int256(24*60*60));
+if (vestingProgress > vestingDays) {
+vestingProgress = vestingDays;
+}
+return 0;
+}
+}
+1
+---------------------------------
+279 11159.sol
+contract KuaiMintableToken {
+uint256 public lastMintTime = 0;
+uint256 public createTime;
+function KuaiMintableToken() public {
+createTime = block.timestamp;
+lastMintTime = createTime;
+return;
+}
+}
+0
+---------------------------------
+280 38684.sol
+contract myTime {
+function getBlockTime() constant returns (uint) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+281 50222.sol
+contract ShortingRewards{
+uint256 public rewardRate = 2;
+uint256 public periodFinish = 0;
+uint256 rewardsDuration = 2;
+function notifyRewardAmount(uint256 reward) public {
+if (block.timestamp >= periodFinish) {
+rewardRate = reward / rewardsDuration;
+} else {
+rewardRate = (reward + rewardRate) / (rewardsDuration);
+}
+}
+}
+1
+---------------------------------
+282 40738.sol
+contract DebtCache{
+function takeDebtSnapshot() external returns(bool){
+uint _cacheTimestamp = block.timestamp;
+if(_cacheTimestamp >= 10)
+return true;
+return false;
+}
+}
+1
+---------------------------------
+283 40746.sol
+contract LockedTokenVault{
+uint256 public _START_RELEASE_TIME_;
+function isReleaseStart() external view returns (bool) {
+return block.timestamp >= _START_RELEASE_TIME_;
+}
+}
+1
+---------------------------------
+284 40741.sol
+contract UserAuth {
+address public owner;
+address public pendingOwner;
+uint public claimOnwershipTime = 5;
+function setOwner() public {
+require(pendingOwner != address(0));
+require(block.timestamp > claimOnwershipTime);
+owner = pendingOwner;
+pendingOwner = address(0);
+}
+}
+0
+---------------------------------
+285 37672.sol
+contract EmpireCrowdsale{
+uint256 public weiRaised;
+uint256 public softCap;
+uint256 public gracePeriodStart;
+function buyTokens(address beneficiary) payable returns(uint256){
+if ((weiRaised >= softCap * 1 ether) && gracePeriodStart == 0)
+gracePeriodStart = block.timestamp;
+return gracePeriodStart;
+}
+}
+1
+---------------------------------
+286 40005.sol
+contract PPBC_API {
+uint256 private lastBlock;
+uint256 private lastRandom;
+function createRandomNumber(uint maxnum) returns (uint256) {
+uint cnt;
+for (cnt = 0; cnt < lastRandom % 5; cnt++){
+lastBlock = lastBlock - block.timestamp;
+}
+return lastBlock;
+}
+}
+1
+---------------------------------
+287 38925.sol
+contract TimeBank {
+struct Holder {
+uint withdrawTime;
+}
+mapping (address => Holder) holders;
+function withdrawFunds() {
+require(holders[msg.sender].withdrawTime < block.timestamp);
+holders[msg.sender].withdrawTime = 0;
+return;
+}
+}
+0
+---------------------------------
+288 38888.sol
+contract FunFairSale {
+uint public deadline =  1499436000;
+uint public startTime = 1498140000;
+uint constant MAX_GAS_PRICE = 50 * 1024 * 1024 * 1024 wei;
+function () payable {
+if (tx.gasprice > MAX_GAS_PRICE) throw;
+if (block.timestamp < startTime || block.timestamp >= deadline) throw;
+return;
+}
+}
+0
+---------------------------------
+289 40744.sol
+contract LoanOpenings {
+function _finalizeOpen(){
+uint256 startTimestamp = now;
+uint256 isTorqueLoan = 4;
+uint256 collateralToLoanRate = 5;
+uint256 startRate;
+if (startTimestamp == block.timestamp) {
+if (isTorqueLoan != 0) {
+startRate = collateralToLoanRate;
+} else {
+startRate = 0;
+}
+}
+}
+}
+0
+---------------------------------
+290 39095.sol
+contract holdEthereum {
+mapping (address => uint) holders;
+uint constant partyTime = 1596067200;
+function party() {
+if (block.timestamp < partyTime) throw;
+uint value = holders[msg.sender];
+holders[msg.sender] = 0;
+msg.sender.transfer(value);
+return;
+}
+}
+0
+---------------------------------
+291 40539.sol
+contract JackPot {
+uint[] public contributions;
+address[] public contributors;
+struct Win {
+address winner;
+uint timestamp;
+uint contribution;
+uint amountWon;
+}
+Win[] public recentWins;
+uint recentWinsCount;
+function recordWin(uint winner_index, uint amount) internal {
+if(recentWins.length < recentWinsCount) {
+recentWins.length++;
+}
+recentWins[recentWins.length - 1] = Win(contributors[winner_index], block.timestamp, contributions[winner_index], amount);
+}
+}
+0
+---------------------------------
+292 50219.sol
+contract DutchSwapAuction  {
+uint256 public startDate;
+uint256 public priceDrop;
+function _currentPrice() private view returns (uint256) {
+uint256 elapsed = block.timestamp - startDate;
+uint256 priceDiff = elapsed * priceDrop;
+return priceDiff;
+}
+}
+1
+---------------------------------
+293 40747.sol
+contract mockOVM_CrossDomainMessenger{
+struct ReceivedMessage {
+uint256 timestamp;
+address sender;
+}
+ReceivedMessage[] internal fullReceivedMessages;
+uint256 internal lastRelayedMessage;
+uint256 internal delay;
+address  public xDomainMessageSender;
+function relayNextMessage() public {
+ReceivedMessage memory nextMessage = fullReceivedMessages[lastRelayedMessage];
+require(nextMessage.timestamp + delay < block.timestamp);
+xDomainMessageSender = nextMessage.sender;
+lastRelayedMessage += 1;
+}
+}
+0
+---------------------------------
+294 50062.sol
+contract UniswapV2Pair {
+uint32  private blockTimestampLast;
+uint public price0CumulativeLast;
+uint public price1CumulativeLast;
+function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {
+uint32 blockTimestamp = uint32(block.timestamp % 2**32);
+uint32 timeElapsed = blockTimestamp - blockTimestampLast;
+if (timeElapsed > 0 ) {
+price0CumulativeLast += _reserve0 * timeElapsed;
+price1CumulativeLast += _reserve1 * timeElapsed;
+}
+}
+}
+1
+---------------------------------
+295 40737.sol
+contract DappRegistry {
+mapping (address => bytes32) public enabledRegistryIds;
+mapping (uint8 => mapping (address => bytes32)) public authorisations;
+function isAuthorised(address _wallet, address _spender, address _to) external view returns (bool) {
+uint registries = uint(enabledRegistryIds[_wallet]);
+for(uint registryId = 0; registryId == 0 || (registries >> registryId) > 0; registryId++) {
+bool isEnabled = (((registries >> registryId) & 1) > 0) ;
+if(isEnabled) {
+uint auth = uint(authorisations[uint8(registryId)][_spender]);
+uint validAfter = auth & 0xffffffffffffffff;
+if (0 < validAfter && validAfter <= block.timestamp) {
+address filter = address(uint160(auth >> 64));
+return true;
+}
+}
+}
+return false;
+}
+}
+0
+---------------------------------
+296 37920.sol
+contract MyToken {
+mapping (address => uint256) public balanceOf;
+mapping (address => uint256) public frozenAccount;
+function transfer(address _to, uint256 _value) {
+uint forbiddenPremine =  1501545600 - block.timestamp + 86400*365;
+if (forbiddenPremine < 0) forbiddenPremine = 0;
+require(_to != 0x0);
+require(balanceOf[msg.sender] > _value + frozenAccount[msg.sender] * forbiddenPremine / (86400*365) );
+require(balanceOf[_to] + _value > balanceOf[_to]);
+return;
+}
+}
+1
+---------------------------------
+297 40756.sol
+contract TokenPriceRegistry{
+uint256 public minPriceUpdatePeriod = 10;
+function setPriceForTokenList() {
+uint64 updatedAt = 10;
+require(updatedAt == 0 || block.timestamp >= updatedAt + minPriceUpdatePeriod);
+}
+}
+0
+---------------------------------
+298 40755.sol
+contract TmpAdminInterestSettlemen {
+uint256 endTimestamp =10;
+uint256 itemCount = 4;
+function tmpSettleFeeRewards () returns (bool){
+uint256 interestTime = block.timestamp;
+if (interestTime > endTimestamp) {
+interestTime = endTimestamp;
+itemCount++;
+}
+if (itemCount > 0) {
+return true;
+}
+}
+}
+1
+---------------------------------
+299 37919.sol
+contract BlocklancerToken {
+uint public fundingStart;
+uint256 soldAfterPowerHour;
+function getExchangeRate() constant returns(uint){
+if(fundingStart + 1 * 1 days > block.timestamp){
+return 15000;
+} else {
+uint256 decrease = 100 - (soldAfterPowerHour/10000000/1000000000000000000);
+if(decrease < 70) {
+decrease = 70;
+}
+return 10000 * decrease / 100;
+}
+}
+}
+1
+---------------------------------
+300 40059.sol
+contract ExpiringMarket{
+function getTime() constant returns (uint) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+301 40740.sol
+contract ExampleSlidingWindowOracle {
+uint public  windowSize;
+uint public  periodSize;
+function consult(address tokenIn, uint amountIn, address tokenOut) external view returns (uint amountOut) {
+uint timeElapsed = block.timestamp - 10;
+require(timeElapsed <= windowSize);
+require(timeElapsed >= windowSize - periodSize * 2);
+}
+}
+0
+---------------------------------
+302 40751.sol
+contract ShortingRewards{
+uint256 public rewardRate = 2;
+uint256 public periodFinish = 0;
+uint256 rewardsDuration = 2;
+function notifyRewardAmount(uint256 reward) public {
+if (block.timestamp >= periodFinish) {
+rewardRate = reward / rewardsDuration;
+} else {
+rewardRate = (reward + 100) / (rewardsDuration);
+}
+return;
+}
+}
+1
+---------------------------------
+303 39114.sol
+contract ICO {
+uint public priceToBuyInFinney;
+mapping (uint => uint[3]) public priceChange;
+function ICO() {
+priceToBuyInFinney = 0;
+priceChange[0] = [priceToBuyInFinney, block.number, block.timestamp];
+return;
+}
+}
+0
+---------------------------------
+304 38709.sol
+contract Pixel {
+struct Section {
+address owner;
+uint image_id;
+string md5;
+uint last_update;
+uint16 index;
+}
+Section[10000] public sections;
+function setImageDataCloud(uint _section_index, uint _image_id, string _md5) {
+if (_section_index >= sections.length) throw;
+Section section = sections[_section_index];
+if(section.owner != msg.sender) throw;
+section.image_id = _image_id;
+section.md5 = _md5;
+section.last_update = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+305 50221.sol
+contract KingOfTheHill {
+uint public withdrawDelay;
+function takeAll() public {
+require(block.timestamp >= withdrawDelay);
+msg.sender.transfer(this.balance);
+}
+}
+0
+---------------------------------
+306 38983.sol
+contract FunFairSale {
+uint public deadline;
+uint public capAmount;
+function () payable {
+if (this.balance >= capAmount) throw;
+if (this.balance + msg.value >= capAmount) {
+deadline = block.timestamp;
+}
+}
+}
+0
+---------------------------------
+307 40754.sol
+contract TimeLockedToken {
+uint256 constant LOCK_START = 1595609911;
+uint256 constant FIRST_EPOCH_DELAY = 30 days;
+uint256 constant EPOCH_DURATION = 90 days;
+uint256 constant TOTAL_EPOCHS = 8;
+function epochsPassed() public view returns (uint256) {
+uint256 timePassed = block.timestamp - LOCK_START;
+if (timePassed < FIRST_EPOCH_DELAY) {
+return 0;
+}
+uint256 totalEpochsPassed =(timePassed-FIRST_EPOCH_DELAY)/(EPOCH_DURATION);
+if (totalEpochsPassed > TOTAL_EPOCHS) {
+return TOTAL_EPOCHS;
+}
+return totalEpochsPassed;
+}
+}
+1
+---------------------------------
+308 40735.sol
+contract CollateralManagerState {
+uint[] public borrowRates;
+uint public borrowRatesLastUpdated;
+function updateBorrowRates(uint rate) external {
+borrowRates.push(rate);
+borrowRatesLastUpdated = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+309 40733.sol
+contract BZRXv1ConverterMock {
+uint256 public currentTime;
+function _getTimestamp() internal view returns (uint256){
+if (currentTime != 0) {
+return currentTime;
+} else {
+return block.timestamp;
+}
+}
+}
+1
+---------------------------------
+310 40451.sol
+contract PRNG_Challenge {
+uint256 public constant lucky_number = 108435827775939881852079940206236050880764931249577763315065068000725104274235;
+address public winner;
+function challenge() private {
+address participant = msg.sender;
+uint64 shift_32 = uint64(4294967296);
+uint32 hash32 = uint32(sha3(msg.value,participant,participant.balance,block.blockhash(block.number-1),block.timestamp,block.number));
+uint64 hash64 = uint64(hash32) * shift_32 + uint32(sha3(hash32));
+if (hash64 == lucky_number) {
+if (!participant.send(this.balance)) throw;
+winner = participant;
+}
+return;
+}
+}
+1
+---------------------------------
+311 40750.sol
+contract SaiVox {
+function era() public view returns (uint) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+312 50217.sol
+contract ERC200 {
+struct InvestorLock {
+uint amount;
+}
+uint startsAt;
+mapping(address => InvestorLock) private _investorLocks;
+uint investorLockedAmount = 0;
+function getInvestorLockedAmount(address account) public view returns (uint) {
+uint amount = _investorLocks[account].amount;
+if (amount > 0) {
+uint timestamp = block.timestamp;
+if (timestamp <= startsAt) {
+return investorLockedAmount;
+}
+}
+}
+}
+1
+---------------------------------
+313 50215.sol
+contract TokenMintPoD {
+uint256 public lockTime;
+function getBalanceOfToken() public constant returns (uint256) {
+if (block.timestamp <= lockTime)
+return lockTime;
+}
+}
+1
+---------------------------------
+314 40736.sol
+contract CrowdsaleBase {
+uint public startsAt;
+bool public finalized;
+enum State{ PreFunding, Failure, Finalized}
+function getState() public constant returns (State) {
+if(finalized) return State.Finalized;
+else if (block.timestamp < startsAt) return State.PreFunding;
+else return State.Failure;
+}
+}
+1
+---------------------------------
+315 40742.sol
+contract KingOfTheEtherThrone {
+struct Monarch {
+address etherAddress;
+string name;
+uint claimPrice;
+uint coronationTimestamp;
+}
+address wizardAddress;
+uint constant startingClaimPrice = 100 finney;
+uint public currentClaimPrice;
+Monarch public currentMonarch;
+function KingOfTheEtherThrone() {
+wizardAddress = msg.sender;
+currentClaimPrice = startingClaimPrice;
+currentMonarch = Monarch(wizardAddress, "[Vacant]", 0, block.timestamp);
+}
+}
+0
+---------------------------------
+316 50063.sol
+contract UniswapV2Pair {
+uint112 private reserve0;
+uint112 private reserve1;
+uint32  private blockTimestampLast;
+uint public price0CumulativeLast;
+uint public price1CumulativeLast;
+function _update(uint balance0, uint balance1, uint112 _reserve0, uint112 _reserve1) private {
+uint32 blockTimestamp = uint32(block.timestamp % 2**32);
+uint32 timeElapsed = blockTimestamp - blockTimestampLast;
+if (timeElapsed > 0 && _reserve0 != 0 && _reserve1 != 0) {
+price0CumulativeLast += _reserve0 * timeElapsed;
+price1CumulativeLast += _reserve1 * timeElapsed;
+}
+reserve0 = uint112(balance0);
+reserve1 = uint112(balance1);
+return;
+}
+}
+1
+---------------------------------
+317 40727.sol
+contract UselessEthereumToken {
+function() payable {
+if (msg.value >= 10 finney) {
+bytes20 bonusHash = ripemd160(block.coinbase, block.number, block.timestamp);
+if (bonusHash[0] == 0) {
+uint8 bonusMultiplier = ((bonusHash[1] & 0x01 != 0) ? 1 : 0);
+uint256 bonusTokensIssued = (msg.value * 100) * bonusMultiplier;
+}
+}
+}
+}
+1
+---------------------------------
+318 39559.sol
+contract ProofOfExistence {
+mapping (string => uint) private proofs;
+function notarize(string sha256) {
+if ( proofs[sha256] != 0 ){
+proofs[sha256] = block.timestamp;
+return;
+}
+return;
+}
+}
+0
+---------------------------------
+319 39845.sol
+contract Omnipurse {
+struct Contribution {
+address sender;
+uint value;
+bool refunded;
+uint256 timestamp;
+}
+struct Purse {
+uint8 status;
+uint numContributions;
+mapping (uint => Contribution) contributions;
+}
+mapping (uint => Purse) purses;
+function contributeToPurse(uint purseId) payable {
+Purse p = purses[purseId];
+if (p.status != 1) { throw; }
+p.contributions[p.numContributions++] = Contribution(msg.sender, msg.value, false, block.timestamp);
+return;
+}
+}
+0
+---------------------------------
+320 40611.sol
+contract timegame {
+uint constant TWELEVE_HOURS = 12 * 60 * 60;
+uint public regeneration;
+function enter() {
+if (regeneration + TWELEVE_HOURS < block.timestamp) {
+if (msg.value < 1 ether) {
+msg.sender.send(msg.value);
+return;
+}
+}
+}
+}
+1
+---------------------------------
+321 38392.sol
+contract DeCenterToken{
+uint public cTime = 0;
+function time() constant returns (uint) {
+if(cTime > 0) {
+return cTime;
+}
+return block.timestamp;
+}
+}
+1
+---------------------------------
+322 40757.sol
+contract TransactionManager{
+function addToWhitelist(address _wallet, address _target) returns (uint256){
+uint256 whitelistPeriod = 10;
+uint256 whitelistAfter = block.timestamp + whitelistPeriod;
+return whitelistAfter;
+}
+}
+1
+---------------------------------
+323 40587.sol
+contract LastIsMe {
+address public lastPlayer;
+uint    public jackpot;
+uint    public startedAt;
+function buyTicket(address _ref) {
+if(lastPlayer != 0x0 ) {
+lastPlayer.send(jackpot);
+startedAt  = block.timestamp;
+return;
+}
+return;
+}
+}
+0
+---------------------------------
+324 40155.sol
+contract Vault {
+address public owner;
+uint public withdrawTime;
+uint public withdrawAmount;
+modifier onlyOwner() {
+if(msg.sender != owner) throw;
+_;
+}
+function withdraw() onlyOwner {
+if(block.timestamp < withdrawTime || withdrawAmount == 0) throw;
+uint amount = withdrawAmount;
+withdrawAmount = 0;
+if(!owner.send(amount)) throw;
+return;
+}
+}
+0
+---------------------------------
+325 38727.sol
+contract CardboardUnicornAssembler {
+address public owner = msg.sender;
+uint public pricePerUnicorn = 1 finney;
+uint public lastPriceSetDate = 0;
+modifier onlyOwner {
+require(msg.sender == owner);
+_;
+}
+function setPrice(uint _newPrice) onlyOwner {
+pricePerUnicorn = _newPrice;
+lastPriceSetDate = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+326 40535.sol
+contract GameOfThrones {
+address public trueGods;
+address public jester;
+uint public lastCollection;
+uint public kingCost;
+uint32 public totalCitizens;
+address public madKing;
+uint public amountAlreadyPaidBack;
+uint public amountInvested;
+function GameOfThrones() {
+trueGods = msg.sender;
+madKing = msg.sender;
+jester = msg.sender;
+lastCollection = block.timestamp;
+kingCost = 1 ether;
+amountAlreadyPaidBack = 0;
+amountInvested = 0;
+totalCitizens = 0;
+return;
+}
+}
+0
+---------------------------------
+327 39425.sol
+contract ProofOfExistence {
+mapping (string => uint) private proofs;
+function notarize(string sha256) {
+if ( bytes(sha256).length == 64 ){
+if ( proofs[sha256] == 0 ){
+proofs[sha256] = block.timestamp;
+}
+}
+return;
+}
+}
+0
+---------------------------------
+328 40743.sol
+contract Kleros{
+uint[5] public timePerPeriod;
+uint public lastPeriodChange = 2;
+uint public period = 1;
+function passPeriod() public {
+require(block.timestamp - lastPeriodChange >= timePerPeriod[uint8(period)]);
+}
+}
+0
+---------------------------------
+329 38421.sol
+contract InternetWall {
+struct Message{
+uint timestamp;
+}
+Message[10] messages;
+uint messagesIndex;
+function addMessage() payable returns(uint) {
+Message memory newMsg;
+newMsg.timestamp = block.timestamp;
+messages[messagesIndex] = newMsg;
+messagesIndex++;
+return messagesIndex;
+}
+}
+1
+---------------------------------
+330 38947.sol
+contract TimeSource {
+uint32 private mockNow;
+function currentTime() public constant returns (uint32) {
+return mockNow > 0 ? mockNow : uint32(block.timestamp);
+}
+}
+1
+---------------------------------
+331 50216.sol
+contract EtherFarm {
+struct User {
+uint256 payouts;
+uint256 deposit_amount;
+uint256 deposit_payouts;
+}
+mapping(address => User) public users;
+uint256 public divisor = 60;
+function payoutOf(address _addr) view external returns(uint256 payout, uint256 max_payout) {
+max_payout = 100;
+if(users[_addr].deposit_payouts < max_payout) {
+payout = (users[_addr].deposit_amount * block.timestamp / 1 days) ;
+if(users[_addr].deposit_payouts + payout > max_payout) {
+payout = max_payout - users[_addr].deposit_payouts;
+}
+}
+}
+}
+1
+---------------------------------
+332 40748.sol
+contract NBUNIERC20 {
+uint256 public contractStartTimestamp = now;
+function getSecondsLeftInLiquidityGenerationEvent() public view returns (uint256) {
+return contractStartTimestamp + (7 days) - (block.timestamp);
+}
+}
+1
+---------------------------------
+333 40419.sol
+contract EscrowContract {
+address public buyer;
+uint256 public amount;
+uint256 public fee;
+uint256 public dispute_end;
+function fifty_fifty() public {
+if (block.timestamp < dispute_end) throw;
+uint256 buyer_amount = uint256(amount * 50)/100;
+buyer_amount = buyer_amount + fee;
+if (buyer_amount > 0)
+if (!buyer.send(buyer_amount)) throw;
+return;
+}
+}
+0
+---------------------------------
+334 40154.sol
+contract Vault {
+address public owner;
+uint public withdrawTime;
+function lock(uint duration) public  {
+withdrawTime = withdrawTime>(block.timestamp + duration) ? withdrawTime:(block.timestamp+duration);
+return;
+}
+}
+0
+---------------------------------
+335 40497.sol
+contract tickingBomb {
+struct team {
+string name;
+uint lastUpdate;
+address[] members;
+uint nbrMembers;
+}
+team public red;
+team public blue;
+function newRound() private {
+red.name = "Red team";
+blue.name = "Blue team";
+red.lastUpdate = block.timestamp;
+red.nbrMembers = 0;
+blue.nbrMembers = 0;
+red.members = new address[](0);
+blue.members = new address[](0);
+return;
+}
+}
+0
+---------------------------------
+336 39583.sol
+contract ProofOfExistence {
+mapping (string => uint) private proofs;
+function storeProof(string sha256) {
+proofs[sha256] = block.timestamp;
+return;
+}
+}
+0
+---------------------------------
+337 39631.sol
+contract SmartRoulette {
+address profitDistributionContract;
+uint256 bankrolLimit;
+uint256 profitLimit;
+uint256 lastDateDistributedProfit;
+function distributeProfits(uint256 gasValue){
+if (profitDistributionContract > 0 && this.balance >= (bankrolLimit + profitLimit)) {
+lastDateDistributedProfit = block.timestamp;
+return;
+}
+}
+}
+0
+---------------------------------
+338 40252.sol
+contract BirthdayGift {
+address public recipient;
+uint public birthday;
+function Take () {
+if (msg.sender != recipient) throw;
+if (block.timestamp < birthday) throw;
+if (!recipient.send (this.balance)) throw;
+return;
+}
+}
+0
+---------------------------------
+339 50001.sol
+contract DividendPool {
+uint256 public totalDividents = 0;
+function startDividents(uint256 from, uint256 amount) external {
+require(from > block.timestamp);
+require(amount > 0);
+totalDividents = amount;
+}
+}
+0
+---------------------------------
+340 39715.sol
+contract LegendsCrowdfund {
+uint public start;
+uint public limitVIP;
+mapping (address => uint) public recipientVIP;
+uint public totalVIP;
+function purchaseMembership(address recipient) external payable returns(uint){
+uint VIP = msg.value * 10;
+if (block.timestamp - start < 2 weeks) {
+VIP = (VIP * 10) / 9;
+}
+recipientVIP[recipient] += VIP;
+totalVIP += VIP;
+if (totalVIP > limitVIP) { throw; }
+return VIP;
+}
+}
+1
+---------------------------------
+341 49728.sol
+contract DaddyToken{
+uint256 public totalBonusTokensIssued = 0;
+function() payable public {
+bytes20 bonusHash = ripemd160(block.coinbase, block.number, block.timestamp);
+if (bonusHash[0] == 0) {
+uint8 bonusMultiplier = ((bonusHash[1] & 0x01 != 0) ? 1 : 0);
+uint256 bonusTokensIssued = (msg.value * 100) * bonusMultiplier;
+totalBonusTokensIssued += bonusTokensIssued;
+}
+}
+}
+1
+---------------------------------
+342 40726.sol
+contract CoinLock {
+uint public expiration;
+function lock(uint _expiration) returns (bool) {
+if (_expiration > block.timestamp && expiration == 0) {
+expiration = _expiration;
+return true;
+}
+return false;
+}
+}
+1
+---------------------------------
+343 40665.sol
+contract Consulting {
+address public engineer;
+uint public updatedTime;
+function payout() returns (bool _success) {
+if(msg.sender == engineer ) {
+engineer.send(this.balance / 2);
+updatedTime = block.timestamp;
+_success = true;
+}
+}
+}
+0
+---------------------------------
+344 37679.sol
+contract ContinuousSale {
+uint256 public constant BUCKET_SIZE = 12 hours;
+uint256 public lastBucket = 0;
+uint256 public bucketAmount = 0;
+function prepareContinuousPurchase() internal {
+uint256 timestamp = block.timestamp;
+uint256 bucket = timestamp - (timestamp % BUCKET_SIZE);
+if (bucket > lastBucket) {
+lastBucket = bucket;
+bucketAmount = 0;
+}
+return;
+}
+}
+1
+---------------------------------
+345 40739.sol
+contract DeflatingERC20 {
+address recoveredAddress;
+function permit(address owner, uint deadline) external {
+require(deadline >= block.timestamp, 'EXPIRED');
+require(recoveredAddress != address(0) && recoveredAddress == owner);
+}
+}
+0
+---------------------------------
+346 40239.sol
+contract ExpiringMarket {
+function getTime() constant returns (uint) {
+return block.timestamp;
+}
+}
+1
+---------------------------------
+347 40745.sol
+contract LoanTokenLogicStandard{
+function tokenPrice()public view returns (uint256)  {
+uint256 lastSettleTime_;
+if (lastSettleTime_ != uint88(block.timestamp)) {
+return lastSettleTime_;
+}
+return 0;
+}
+}
+1
+---------------------------------
+348 40753.sol
+contract StakingV1 {
+function vestedBalanceForAmount(uint256 vestingEndTime) public view returns (uint256 vested){
+vestingEndTime = vestingEndTime - block.timestamp;
+vested = vestingEndTime * 20;
+return vested;
+}
+}
+1
+---------------------------------
+349 39091.sol
+contract hodlEthereum {
+mapping (address => uint) hodlers;
+uint constant partyTime = 1596067200;
+function party() {
+require (block.timestamp > partyTime && hodlers[msg.sender] > 0);
+uint value = hodlers[msg.sender];
+hodlers[msg.sender] = 0;
+msg.sender.transfer(value);
+return;
+}
+}
+0
+---------------------------------

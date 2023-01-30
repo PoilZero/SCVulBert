@@ -60,12 +60,11 @@ class AttBLSTM(nn.Module):
         h = h[:,:,self.hidden_size:] + h[:,:,:self.hidden_size]
         h = self.lstm_dropout(h)
         atth = self.Att_layer(h)
-        atth = self.attention_dropout(atth) # [bs, seq, 768]=>[bs, 768]
-        return atth.squeeze()
-        # out = self.fc(atth)
-        # out = self.softmax(out)
-        #
-        # return out.view(self.batch_size_var, -1)
+        atth = self.attention_dropout(atth)
+        out = self.fc(atth)
+        out = self.softmax(out)
+
+        return out.view(self.batch_size_var, -1)
 
 class SCVulBert(BertPreTrainedModel):
     def __init__(self, config):
@@ -73,31 +72,20 @@ class SCVulBert(BertPreTrainedModel):
         self.bert = BertModel(config, add_pooling_layer=False)
 
         self.dropout = nn.Dropout(conf.dropout)
-        self.classifier = nn.Sequential(
-            nn.Linear(768, 2)
-            , nn.Softmax(dim=-1) # default dim=-1 for each result not batch normalization
-        )
-
-        # self.blstm_att  = AttBLSTM(input_size=768, label_size=2, num_layer=1)
-        # self.fusion = nn.Sequential(
-        #     nn.Linear(768 * 2, 2)
-        #     , nn.Softmax(dim=-1)
-        # )
+        self.classifier = nn.Linear(768, 2)
+        self.blstm_att  = AttBLSTM(input_size=768, label_size=2, num_layer=1)
 
         self.post_init()
 
     def forward(self, x):
         bert_output = self.bert(**x)
+        # cls_vectors = bert_output[0][:, 0, :] # [16, len(tokens), 768]=>[16, 768]
+        # cls_vectors = self.dropout(cls_vectors)
+        # logits = self.classifier(cls_vectors)
+        # logits = F.softmax(logits, dim=-1) # default dim=-1 for each result not batch normalization
 
-        cls_vectors = bert_output[0][:, 0, :] # [16, len(tokens), 768]=>[16, 768]
-        cls_vectors = self.dropout(cls_vectors)
-        logits = self.classifier(cls_vectors)
-
-        # logits1 = bert_output[1]
-        # logits2 = self.blstm_att(bert_output[0])
-        #
-        # logits = torch.cat([logits1, logits2], dim=-1)
-        # logits = self.fusion(logits)
+        # bert_output[0]: [batch_size, seq_lens, 768]
+        logits = self.blstm_att(bert_output[0])
 
         return logits
 

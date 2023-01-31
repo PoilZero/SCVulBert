@@ -1,13 +1,9 @@
 # coding:utf8
-from E50_com import *
-from torch.utils.data import random_split
 from tqdm.auto import tqdm # for iter进度条
 from torch.optim import AdamW
 from transformers import get_scheduler
 
-from E55_Dataset import SCVulData
-from E56_DatasetLoader import *
-from E61_model import *
+from E60_models.E61_model import *
 
 def train_once(dataloader, model, loss_fn, optimizer, lr_scheduler, epoch):
     progress_bar = tqdm(range(len(dataloader)))
@@ -128,10 +124,10 @@ def evaluate_once(dataloader, model, loss_fn, mode='Valid'):
         print('F1 score: ', 'NA')
     print()
 
-import sys
 if __name__ == '__main__':
     # dataset load && tokenlization
-    all_data = SCVulData(sys.argv[1] if len(sys.argv)>=2 else None)
+    # all_data = SCVulData(sys.argv[1] if len(sys.argv)>=2 else None)
+    all_data = SCVulData()
 
     # train_data, valid_data = random_split(all_data, [
     #     int(len(all_data) * 0.8), len(all_data) - int(len(all_data) * 0.8)

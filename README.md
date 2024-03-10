@@ -1,6 +1,16 @@
 # SCVulBERT
 
-Smart Contract Vul for Detection based on Pretrain Bert (torch backen)
+Model Training Part Smart Contract Vul for Detection based on Pretrain Bert (torch backen)
+
+## Paper
+
+Paper "A High-Performance Smart Contract Vulnerability Detection Scheme Based on BERT" has published in ICPADS 2023.
+
+Author: Shengqiang Zeng, Ruhuang Chen, Hongwei Zhang, and Jinsong Wang.
+
+Online Link https://ieee-cybermatics.org/2023/icpads/icpads-2023-accepted.htm .
+
+Paper Manuscript already upload as [SCVulBert.6.17.2023](https://github.com/PoilZero/SCVulBert/blob/main/SCVulBert.6.17.2023.pdf).
 
 ## Requirements
 
